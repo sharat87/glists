@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang=en>
+
+    <head>
+        <meta charset=utf-8>
+        <title>Glists</title>
+
+        <link rel=stylesheet href=css/styles.css>
+
+    <body>
+
+        <header><h1>Glists</h1></header>
+
+        <div id=lists-container>
+            <form id=new-task-list-form action="" method=POST>
+                <input type=text name=title placeholder="New list title">
+                <input type=submit value=Create>
+            </form>
+            <div id=task-list-container></div>
+        </div>
+
+        <div id=right-panel>
+            <div id=tasks-container>Please select a list in the left.</div>
+            <form id=new-task-form action="" method=POST>
+                <input name=title placeholder="Create a new task">
+                <input type=submit value=Add>
+            </form>
+        </div>
+
+        <script src=vendor/jquery-1.7.2.min.js></script>
+        <script src=vendor/underscore-min.js></script>
+        <script src=vendor/backbone-min.js></script>
+        <script src=js/main.js></script>
