@@ -7,7 +7,7 @@ describe('Task lists spec', function () {
             title: 'New list'
         });
 
-        runs( function () {
+        var createList = function () {
             newList.save({}, {
                 success: function (model, response) {
                     expect(newList.get('id')).toBeDefined();
@@ -15,26 +15,27 @@ describe('Task lists spec', function () {
                     renameList();
                 }
             });
+        };
 
-            var renameList = function () {
-                newList.save({title: 'Updated list'}, {
-                    success: function (model, response) {
-                        expect(newList.get('title')).toEqual('Updated list');
-                        deleteList();
-                    }
-                });
-            };
+        var renameList = function () {
+            newList.save({title: 'Updated list'}, {
+                success: function (model, response) {
+                    expect(newList.get('title')).toEqual('Updated list');
+                    deleteList();
+                }
+            });
+        };
 
-            var deleteList = function () {
-                newList.destroy({
-                    success: function (model, response) {
-                        expect(response).toBeNull();
-                        flag = true;
-                    }
-                });
-            };
+        var deleteList = function () {
+            newList.destroy({
+                success: function (model, response) {
+                    expect(response).toBeNull();
+                    flag = true;
+                }
+            });
+        };
 
-        });
+        runs(createList);
 
         waitsFor(function () { return flag; },
                'TaskList functionality testing is not stopping.', 5000);
