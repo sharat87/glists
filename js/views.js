@@ -158,20 +158,27 @@
     TaskListView.currentList = null;
 
     var TaskListsCollectionView = window.TaskListsCollectionView = V.extend({
-        tagName: 'ul',
-        className: 'task-lists',
-        rootElem: $('#task-list-container'),
+        el: '#lists-container',
+
         render: function () {
-            var _this = this;
-            this.collection.forEach(function (list) {
-                var view;
-                view = new TaskListView({
-                    model: list
-                });
-                return _this.$el.append(view.render().el);
+            this.$el.html('<form id=new-task-list-form action="" ' +
+                                'method=POST>' +
+                                '<input type=text name=title ' +
+                                'placeholder="New list title">' +
+                                '<input type=submit value=Create>' +
+                                '</form>');
+
+            var ulElem = $('<ul>');
+
+            this.collection.forEach(function (model) {
+                new TaskListView({model: model}).render().$el.appendTo(ulElem);
             });
+
+            this.$el.append(ulElem);
+
             return this;
         }
+
     });
 
 })();

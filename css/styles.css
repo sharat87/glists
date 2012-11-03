@@ -65,7 +65,7 @@ header .right a:hover {
     border-right-color: #333;
 }
 
-#lists-container .task-lists {
+#lists-container ul {
     list-style: none;
     padding: 0;
 }

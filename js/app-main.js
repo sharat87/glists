@@ -5,7 +5,7 @@ authenticated(function (auth) {
     taskListsCollection.on('reset', function () {
         new TaskListsCollectionView({
             collection: this
-        }).renderAndApply();
+        }).render();
     });
 
     taskListsCollection.fetch();
