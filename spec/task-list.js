@@ -1,7 +1,8 @@
 describe('API endpoint integration', function () {
 
     it('should work with the Google API endpoint flawlessly', function () {
-        var testSequenceTimeout = 10000,
+        var testSequence = [], // The sequence of calling the test functions.
+            testSequenceTimeout = 10000, // Timeout to wait for the tests.
             initialListCount = 0;
 
         // The master collection of all the task lists.
@@ -18,103 +19,114 @@ describe('API endpoint integration', function () {
         });
 
         // Fetch all the lists, before we do anything.
-        var fetchLists1 = function () {
+        testSequence.push(function (nextFn) {
             taskListsCollection.fetch({
                 success: function (collection, response) {
                     initialListCount = collection.length;
-                    createList();
+                    nextFn();
                 }
             });
-        };
+        });
 
         // Create a new list, as defined above.
-        var createList = function () {
+        testSequence.push(function (nextFn) {
             newList.save({}, {
                 success: function (model, response) {
                     expect(newList.get('id')).toBeDefined();
                     expect(newList.get('title')).toEqual('New list');
-                    fetchLists2();
+                    nextFn();
                 }
             });
-        };
+        });
 
         // Fetch all lists again, and see that there is a new one.
-        var fetchLists2 = function () {
+        testSequence.push(function (nextFn) {
             taskListsCollection.fetch({
                 success: function (collection, response) {
                     expect(collection.length).toEqual(initialListCount + 1);
-                    renameList();
+                    nextFn();
                 }
             });
-        };
+        });
 
         // Update the title of the list and confirm its changed.
-        var renameList = function () {
+        testSequence.push(function (nextFn) {
             newList.save({title: 'Updated list'}, {
                 success: function (model, response) {
                     expect(newList.get('title')).toEqual('Updated list');
-                    fetchTasks1();
+                    nextFn();
                 }
             });
-        };
+        });
 
         // Fetch tasks in the new list and ensure there are none.
-        var fetchTasks1 = function () {
+        testSequence.push(function (nextFn) {
             newList.fetchTasks({
                 success: function(collection, response) {
                     expect(newList.tasks.length).toEqual(0);
-                    saveTask();
+                    nextFn();
                 }
             });
-        };
+        });
 
         // Save the new task to the server, on the new list.
-        var saveTask = function () {
+        testSequence.push(function (nextFn) {
             newList.tasks.add(newTask);
             newTask.save({}, {
                 success: function (model, response) {
                     expect(newTask.get('id')).toBeDefined();
-                    fetchTasks2();
+                    nextFn();
                 }
             });
-        };
+        });
 
         // Fetch tasks in the new list and ensure there are none.
-        var fetchTasks2 = function () {
+        testSequence.push(function (nextFn) {
             newList.fetchTasks({
                 success: function(collection, response) {
                     expect(newList.tasks.length).toEqual(1);
-                    deleteList();
+                    nextFn();
                 }
             });
-        };
+        });
 
         // Delete the newly created list.
-        var deleteList = function () {
+        testSequence.push(function (nextFn) {
             newList.destroy({
                 success: function (model, response) {
                     expect(response).toBeNull();
-                    fetchLists3();
+                    nextFn();
                 }
             });
-        };
+        });
 
         // Fetch all lists again, and see that its back to the original listing.
-        var fetchLists3 = function () {
+        testSequence.push(function (nextFn) {
             taskListsCollection.fetch({
                 success: function (collection, response) {
                     expect(collection.length).toEqual(initialListCount);
-                    finishTestSequence();
+                    nextFn();
                 }
             });
-        };
+        });
+
 
         // Testing is done, let Jasmine know of this.
-        var flag = false, finishTestSequence = function () {
+        var flag = false;
+        testSequence.push(function () {
             flag = true;
-        };
+        });
 
-        runs(fetchLists1);
+        // Call the functions in the sequence in order, passing control around
+        // like a ping-pong.
+        runs(function () {
+            var makeNextFn = function (i) {
+                return function () {
+                    testSequence[i](makeNextFn(i + 1));
+                };
+            };
+            makeNextFn(0)();
+        });
 
         waitsFor(function () { return flag; },
                'TaskList functionality testing is not stopping.',
