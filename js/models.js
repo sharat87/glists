@@ -46,14 +46,11 @@
                 this.get('tasklist') + '/tasks';
         },
 
-        parse: function (response) {
-            response.tasklist = response.id;
-            return response;
-        },
-
         url: function () {
-            return 'https://www.googleapis.com/tasks/v1/users/@me/lists/' +
-                (this.get('id') || '');
+            // If there is no `selfLink`, this must be a new TaskList. We use
+            // the empty create url.
+            return this.get('selfLink') ||
+                'https://www.googleapis.com/tasks/v1/users/@me/lists/';
         }
 
     });
@@ -62,7 +59,7 @@
         model: TaskList,
         url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
         parse: function (response) {
-            return _.map(response.items, TaskList.prototype.parse);
+            return response.items;
         },
         comparator: function (taskList) {
             return taskList.get('title').toLowerCase();
