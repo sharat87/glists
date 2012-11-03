@@ -12,6 +12,11 @@ describe('API endpoint integration', function () {
             title: 'New list'
         });
 
+        // The new task instance to play with.
+        var newTask = new TaskItem({
+            title: 'Just get this done already!'
+        });
+
         // Fetch all the lists, before we do anything.
         var fetchLists1 = function () {
             taskListsCollection.fetch({
@@ -38,7 +43,7 @@ describe('API endpoint integration', function () {
             taskListsCollection.fetch({
                 success: function (collection, response) {
                     expect(collection.length).toEqual(initialListCount + 1);
-                    fetchTasks1();
+                    renameList();
                 }
             });
         };
@@ -48,7 +53,7 @@ describe('API endpoint integration', function () {
             newList.save({title: 'Updated list'}, {
                 success: function (model, response) {
                     expect(newList.get('title')).toEqual('Updated list');
-                    deleteList();
+                    fetchTasks1();
                 }
             });
         };
@@ -58,7 +63,28 @@ describe('API endpoint integration', function () {
             newList.fetchTasks({
                 success: function(collection, response) {
                     expect(newList.tasks.length).toEqual(0);
-                    renameList();
+                    saveTask();
+                }
+            });
+        };
+
+        // Save the new task to the server, on the new list.
+        var saveTask = function () {
+            newList.tasks.add(newTask);
+            newTask.save({}, {
+                success: function (model, response) {
+                    expect(newTask.get('id')).toBeDefined();
+                    fetchTasks2();
+                }
+            });
+        };
+
+        // Fetch tasks in the new list and ensure there are none.
+        var fetchTasks2 = function () {
+            newList.fetchTasks({
+                success: function(collection, response) {
+                    expect(newList.tasks.length).toEqual(1);
+                    deleteList();
                 }
             });
         };
