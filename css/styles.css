@@ -29,6 +29,26 @@ header {
 
 header h1 {
     margin: 0;
+    float: left;
+}
+
+header .right {
+    display: inline-block;
+    float: right;
+    padding-right: 40px;
+}
+
+header .right a {
+    color: #CCC;
+    text-decoration: none;
+    padding: 3px 6px;
+    border-radius: 2px;
+    font-size: 1.1em;
+}
+
+header .right a:hover {
+    color: #333;
+    background-color: #CCC;
 }
 
 #lists-container {
