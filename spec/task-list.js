@@ -102,6 +102,28 @@ describe('API endpoint integration', function () {
         });
     });
 
+    // Mark the task completed.
+    testSequence.push(function (nextFn) {
+        newTask.save({status: 'completed'}, {
+            success: function (model, response) {
+                expect(newTask.get('status')).toEqual('completed');
+                expect(newTask.get('completed')).toBeDefined();
+                nextFn();
+            }
+        });
+    });
+
+    // Mark the task incomplete.
+    testSequence.push(function (nextFn) {
+        newTask.save({status: 'needsAction', completed: null}, {
+            success: function (model, response) {
+                expect(newTask.get('status')).toEqual('needsAction');
+                expect(newTask.get('completed')).toBeNull();
+                nextFn();
+            }
+        });
+    });
+
     // Delete the newly created list.
     testSequence.push(function (nextFn) {
         newList.destroy({
