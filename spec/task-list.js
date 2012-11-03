@@ -1,7 +1,7 @@
 describe('API endpoint integration', function () {
 
     var testSequence = [], // The sequence of calling the test functions.
-        testSequenceTimeout = 15000, // Timeout to wait for the tests.
+        testSequenceTimeout = 25000, // Timeout to wait for the tests.
         initialListCount = 0;
 
     // The master collection of all the task lists.
@@ -62,7 +62,7 @@ describe('API endpoint integration', function () {
     testSequence.push(function (nextFn) {
         newList.fetchTasks({
             success: function(collection, response) {
-                expect(newList.tasks.length).toEqual(0);
+                expect(collection.length).toEqual(0);
                 nextFn();
             }
         });
@@ -83,7 +83,7 @@ describe('API endpoint integration', function () {
     testSequence.push(function (nextFn) {
         newList.fetchTasks({
             success: function(collection, response) {
-                expect(newList.tasks.length).toEqual(1);
+                expect(collection.length).toEqual(1);
                 // The `newTask` instance's knowledge of this collection is
                 // gone, since collection data is reset.
                 newTask.collection = collection;
@@ -119,6 +119,26 @@ describe('API endpoint integration', function () {
             success: function (model, response) {
                 expect(newTask.get('status')).toEqual('needsAction');
                 expect(newTask.get('completed')).toBeNull();
+                nextFn();
+            }
+        });
+    });
+
+    // Delete the task.
+    testSequence.push(function (nextFn) {
+        newTask.destroy({
+            success: function (model, response) {
+                expect(response).toBeNull();
+                nextFn();
+            }
+        });
+    });
+
+    // Fetch tasks in the new list again and ensure there are none.
+    testSequence.push(function (nextFn) {
+        newList.fetchTasks({
+            success: function(collection, response) {
+                expect(collection.length).toEqual(0);
                 nextFn();
             }
         });
