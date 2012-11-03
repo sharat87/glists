@@ -3,13 +3,16 @@
     // Being lazy.
     var M = Backbone.Model, C = Backbone.Collection;
 
+    // A better default implementation for Collection's parse method, than a
+    // no-op.
+    C.prototype.parse = function (response) {
+        return response.items;
+    };
+
     var TaskItem = window.TaskItem = M.extend();
 
     var TasksCollection = window.TasksCollection = C.extend({
-        model: TaskItem,
-        parse: function (response) {
-            return response.items;
-        }
+        model: TaskItem
     });
 
     var TaskList = window.TaskList = M.extend({
@@ -40,9 +43,6 @@
     var TaskListsCollection = window.TaskListsCollection = C.extend({
         model: TaskList,
         url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
-        parse: function (response) {
-            return response.items;
-        },
         comparator: function (taskList) {
             return taskList.get('title').toLowerCase();
         }
