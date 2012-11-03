@@ -40,10 +40,9 @@
     });
 
     var TaskList = window.TaskList = M.extend({
+
         initialize: function () {
             this.tasks = new TasksCollection();
-            this.tasks.url = 'https://www.googleapis.com/tasks/v1/lists/' +
-                this.get('tasklist') + '/tasks';
         },
 
         url: function () {
@@ -51,6 +50,16 @@
             // the empty create url.
             return this.get('selfLink') ||
                 'https://www.googleapis.com/tasks/v1/users/@me/lists/';
+        },
+
+        fetchTasks: function (options) {
+            if (this.isNew()) {
+                // Can't get tasks if this isn't a list saved on the server.
+                throw new Error('Cannot get tasks of a new list.');
+            }
+            this.tasks.url = 'https://www.googleapis.com/tasks/v1/lists/' +
+                this.get('id') + '/tasks';
+            this.tasks.fetch(options);
         }
 
     });

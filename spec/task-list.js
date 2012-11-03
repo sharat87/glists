@@ -38,7 +38,7 @@ describe('API endpoint integration', function () {
             taskListsCollection.fetch({
                 success: function (collection, response) {
                     expect(collection.length).toEqual(initialListCount + 1);
-                    renameList();
+                    fetchTasks1();
                 }
             });
         };
@@ -49,6 +49,16 @@ describe('API endpoint integration', function () {
                 success: function (model, response) {
                     expect(newList.get('title')).toEqual('Updated list');
                     deleteList();
+                }
+            });
+        };
+
+        // Fetch tasks in the new list and ensure there are none.
+        var fetchTasks1 = function () {
+            newList.fetchTasks({
+                success: function(collection, response) {
+                    expect(newList.tasks.length).toEqual(0);
+                    renameList();
                 }
             });
         };
