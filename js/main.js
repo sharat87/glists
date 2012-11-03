@@ -235,15 +235,6 @@
 
     var startApp = function (auth) {
 
-        // Add the access_token to any requests to the REST end point.
-        Backbone.sync = function (method, model, options) {
-            (options || (options = {})).beforeSend = function (xhr) {
-                return xhr.setRequestHeader('Authorization',
-                                            "Bearer " + auth.access_token);
-            };
-            return Backbone.__sync.call(this, method, model, options);
-        };
-
         var taskListsCollection = new TaskListsCollection();
         taskListsCollection.fetch();
 
@@ -272,35 +263,6 @@
 
     };
 
-    var goToAuthPage = function () {
-        window.location = chrome.extension.getURL('auth/authenticate.html');
-    };
-
-    var auth;
-    if (typeof localStorage.auth === 'undefined' ||
-            (auth = JSON.parse(localStorage.auth)) === null) {
-
-        goToAuthPage();
-
-    } else {
-
-        $.ajax({
-            url: 'https://www.googleapis.com/oauth2/v1/tokeninfo',
-            data: {
-                access_token: auth.access_token
-            },
-            dataType: 'json',
-            success: function (response) {
-                if (response.audience === CLIENT_ID) {
-                    startApp(auth);
-                }
-            },
-            error: function () {
-                localStorage.removeItem('auth');
-                goToAuthPage();
-            }
-        });
-
-    }
+    authenticated(startApp);
 
 }).call(this);
