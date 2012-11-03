@@ -124,6 +124,8 @@ describe('API endpoint integration', function () {
         });
     });
 
+    // TODO: Test updates to: parent, position, notes, hidden, links.
+
     // Delete the task.
     testSequence.push(function (nextFn) {
         newTask.destroy({
