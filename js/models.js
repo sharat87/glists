@@ -44,16 +44,16 @@
             this.tasks = new TasksCollection();
             this.tasks.url = 'https://www.googleapis.com/tasks/v1/lists/' +
                 this.get('tasklist') + '/tasks';
-            this.url = 'https://www.googleapis.com/tasks/v1/users/@me/lists/' +
-                (this.get('tasklist') || '');
         },
 
         parse: function (response) {
-            return {
-                tasklist: response.id || response.tasklist,
-                title: response.title,
-                updated: response.updated
-            };
+            response.tasklist = response.id;
+            return response;
+        },
+
+        url: function () {
+            return 'https://www.googleapis.com/tasks/v1/users/@me/lists/' +
+                (this.get('id') || '');
         }
 
     });

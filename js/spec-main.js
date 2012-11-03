@@ -6,17 +6,17 @@
 
     jasmineEnv.addReporter(htmlReporter);
 
-    jasmineEnv.specFilter = function(spec) {
+    jasmineEnv.specFilter = function (spec) {
         return htmlReporter.specFilter(spec);
     };
 
     var currentWindowOnload = window.onload;
 
-    window.onload = function() {
+    window.onload = function () {
         if (currentWindowOnload) {
             currentWindowOnload();
         }
-        execJasmine();
+        authenticated(execJasmine);
     };
 
     function execJasmine() {
