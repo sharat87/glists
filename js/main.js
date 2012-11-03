@@ -3,43 +3,11 @@
     // Being lazy.
     var M = Backbone.Model, C = Backbone.Collection, V = Backbone.View;
 
-    // Backup the default sync, as we will be rewriting it.
-    Backbone.__sync = Backbone.sync;
-
     // A helper function on views for rendering and placing into the DOM.
     V.prototype.renderAndApply = function () {
         this.render();
         return this.rootElem.empty().append(this.$el);
     };
-
-    var TaskItem = M.extend({
-
-        initialize: function () {
-            // Sometimes the `id` is set to the id of the task. We want the
-            // `task` property to be used for this, for easier compatiblity with
-            // the REST API.
-            this.on('change:id', function () {
-                this.set('task', this.get('id'));
-            });
-        },
-
-        url: function () {
-            var url = this.get('selfLink');
-
-            if (!url) {
-                url = 'https://www.googleapis.com/tasks/v1/lists/' +
-                    this.get('tasklist') + '/tasks';
-
-                if (this.get('task')) {
-                    url += '/' + this.get('task');
-                }
-
-                this.set('selfLink', url);
-            }
-
-            return url;
-        }
-    });
 
     var TaskView = V.extend({
         tagName: 'div',
@@ -107,13 +75,6 @@
 
     });
 
-    var TasksCollection = C.extend({
-        model: TaskItem,
-        parse: function (response) {
-            return response.items;
-        }
-    });
-
     var TasksCollectionView = V.extend({
         tagName: 'div',
         className: 'task-list',
@@ -127,25 +88,6 @@
             }, this);
             return this;
         }
-    });
-
-    var TaskList = M.extend({
-        initialize: function () {
-            this.tasks = new TasksCollection();
-            this.tasks.url = 'https://www.googleapis.com/tasks/v1/lists/' +
-                this.get('tasklist') + '/tasks';
-            this.url = 'https://www.googleapis.com/tasks/v1/users/@me/lists/' +
-                (this.get('tasklist') || '');
-        },
-
-        parse: function (response) {
-            return {
-                tasklist: response.id || response.tasklist,
-                title: response.title,
-                updated: response.updated
-            };
-        }
-
     });
 
     var currentTaskList = null;
@@ -203,6 +145,7 @@
         initialize: function () {
             var _this = this;
             this.on('reset', function () {
+                // FIXME: A model depending on a view. How disgraceful!
                 new TaskListsCollectionView({
                     collection: _this
                 }).renderAndApply();

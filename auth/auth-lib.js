@@ -12,12 +12,14 @@
             return;
         }
 
+        var original_sync = Backbone.sync;
+
         Backbone.sync = function (method, model, options) {
             (options || (options = {})).beforeSend = function (xhr) {
                 xhr.setRequestHeader('Authorization',
                                      'Bearer ' + auth.access_token);
             };
-            return Backbone.__sync.call(this, method, model, options);
+            return original_sync.call(this, method, model, options);
         };
 
     };
