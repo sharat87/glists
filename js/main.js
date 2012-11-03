@@ -1,7 +1,7 @@
 (function () {
 
     // Being lazy.
-    var M = Backbone.Model, C = Backbone.Collection, V = Backbone.View;
+    var V = Backbone.View;
 
     // A helper function on views for rendering and placing into the DOM.
     V.prototype.renderAndApply = function () {
@@ -139,26 +139,6 @@
 
     });
 
-    var TaskListsCollection = C.extend({
-        model: TaskList,
-        url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
-        initialize: function () {
-            var _this = this;
-            this.on('reset', function () {
-                // FIXME: A model depending on a view. How disgraceful!
-                new TaskListsCollectionView({
-                    collection: _this
-                }).renderAndApply();
-            });
-        },
-        parse: function (response) {
-            return _.map(response.items, TaskList.prototype.parse);
-        },
-        comparator: function (taskList) {
-            return taskList.get('title').toLowerCase();
-        }
-    });
-
     var TaskListsCollectionView = V.extend({
         tagName: 'ul',
         className: 'task-lists',
@@ -179,6 +159,13 @@
     var startApp = function (auth) {
 
         var taskListsCollection = new TaskListsCollection();
+
+        taskListsCollection.on('reset', function () {
+            new TaskListsCollectionView({
+                collection: this
+            }).renderAndApply();
+        });
+
         taskListsCollection.fetch();
 
         var newTaskListForm = $('#new-task-list-form');

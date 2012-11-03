@@ -58,4 +58,15 @@
 
     });
 
+    var TaskListsCollection = window.TaskListsCollection = C.extend({
+        model: TaskList,
+        url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
+        parse: function (response) {
+            return _.map(response.items, TaskList.prototype.parse);
+        },
+        comparator: function (taskList) {
+            return taskList.get('title').toLowerCase();
+        }
+    });
+
 })();
