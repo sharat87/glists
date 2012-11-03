@@ -9,7 +9,7 @@
     },
     "content_scripts": [{
         "matches": ["https://www.google.com/robots.txt*"],
-        "js": ["js/oauth_inject.js"],
+        "js": ["auth/oauth_inject.js"],
         "run_at": "document_start"
     }],
     "permissions": ["https://accounts.google.com/o/oauth2/token"],

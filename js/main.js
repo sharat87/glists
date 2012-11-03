@@ -277,7 +277,7 @@
     };
 
     var goToAuthPage = function () {
-        return window.location = chrome.extension.getURL('authenticate.html');
+        window.location = chrome.extension.getURL('auth/authenticate.html');
     };
 
     var auth;
