@@ -92,11 +92,20 @@
 
     var TaskListView = window.TaskListView = V.extend({
         tagName: 'li',
-        className: 'task-list-name',
+        className: 'task-list-item',
+
+        initialize: function () {
+            this.model.on('change:title', this.render, this);
+        },
 
         render: function () {
-            this.$el.html('<a href=#><span>' + this.model.get('title') +
-                          '</span>' + '<button class=del-btn>Del</button></a>');
+            this.el.innerHTML = '<a href=#>' +
+                              '<span>' + this.model.get('title') + '</span>' +
+                              '<span class=controls>' +
+                              '<button class=edit-btn>Edit</button>' +
+                              '<button class=del-btn>Del</button>' +
+                              '</span>' +
+                              '</a>';
             return this;
         },
 
@@ -130,6 +139,15 @@
                         return this.remove();
                     }
                 });
+            },
+
+            'click .edit-btn': function (e) {
+                e.stopPropagation();
+                var oldTitle = this.model.get('title'),
+                    newTitle = prompt('Edit list "' + oldTitle + '"', oldTitle);
+                if (newTitle && newTitle != oldTitle) {
+                    this.model.save({title: newTitle});
+                }
             }
 
         }

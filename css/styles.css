@@ -70,32 +70,42 @@ header .right a:hover {
     padding: 0;
 }
 
-#lists-container .task-lists .del-btn {
+.task-list-item .controls {
     display: none;
-}
-
-#lists-container .task-lists li.selected a {
-    background-color: #333;
-    color: white;
-}
-
-#lists-container .task-lists li.selected a .del-btn {
-    display: inline-block;
-    color: orange;
-    background: none;
-    border: none;
-    cursor: pointer;
     float: right;
 }
 
-#lists-container .task-lists a {
+.task-list-item.selected .controls {
+    display: inline-block;
+}
+
+.task-list-item button {
+    color: #CCC;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 2px;
+}
+
+.task-list-item button:hover {
+    color: #333;
+    background: #CCC;
+}
+
+.task-list-item a {
     display: block;
-    padding: 6px 12px;
+    padding: 6px 3px 6px 12px;
     text-decoration: none;
     color: #333;
 }
 
-#lists-container .task-lists a:hover {
+.task-list-item a:hover {
+    background-color: #333;
+    color: white;
+}
+
+.task-list-item.selected a {
     background-color: #333;
     color: white;
 }
