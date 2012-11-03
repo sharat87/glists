@@ -1,7 +1,7 @@
 describe('API endpoint integration', function () {
 
     var testSequence = [], // The sequence of calling the test functions.
-        testSequenceTimeout = 10000, // Timeout to wait for the tests.
+        testSequenceTimeout = 15000, // Timeout to wait for the tests.
         initialListCount = 0;
 
     // The master collection of all the task lists.
@@ -79,11 +79,24 @@ describe('API endpoint integration', function () {
         });
     });
 
-    // Fetch tasks in the new list and ensure there are none.
+    // Fetch tasks in the new list and ensure there is exactly one.
     testSequence.push(function (nextFn) {
         newList.fetchTasks({
             success: function(collection, response) {
                 expect(newList.tasks.length).toEqual(1);
+                // The `newTask` instance's knowledge of this collection is
+                // gone, since collection data is reset.
+                newTask.collection = collection;
+                nextFn();
+            }
+        });
+    });
+
+    // Edit the title of this task.
+    testSequence.push(function (nextFn) {
+        newTask.save({title: 'edited title'}, {
+            success: function (model, response) {
+                expect(newTask.get('title')).toEqual('edited title');
                 nextFn();
             }
         });
