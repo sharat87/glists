@@ -103,7 +103,6 @@
         events: {
 
             'click a': function (e) {
-                var _this = this;
                 e.preventDefault();
 
                 this.$el.addClass('selected')
@@ -113,10 +112,10 @@
 
                 TaskListView.currentList = this.model;
 
-                this.model.tasks.fetch({
-                    success: function () {
+                this.model.fetchTasks({
+                    success: function (collection, response) {
                         new TasksCollectionView({
-                            collection: _this.model.tasks
+                            collection: collection
                         }).renderAndApply();
                     }
                 });
