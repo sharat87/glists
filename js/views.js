@@ -131,14 +131,16 @@
             },
 
             'click .del-btn': function (e) {
-                e.preventDefault();
                 e.stopPropagation();
-                this.$el.hide();
-                return this.model.destroy({
-                    success: function () {
-                        return this.remove();
-                    }
-                });
+                if (confirm('Sure to delete the list "' +
+                            this.model.get('title') + '"')) {
+                    this.$el.slideUp();
+                    this.model.destroy({
+                        success: function () {
+                            this.remove();
+                        }
+                    });
+                }
             },
 
             'click .edit-btn': function (e) {
