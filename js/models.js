@@ -12,17 +12,14 @@
     var TaskItem = window.TaskItem = M;
 
     var _TasksCollection = C.extend({
-        model: TaskItem,
-        url: function() {
-            return 'https://www.googleapis.com/tasks/v1/lists/' +
-                this.taskList.get('id') + '/tasks';
-        }
+        model: TaskItem
     });
 
     var TaskList = window.TaskList = M.extend({
         initialize: function () {
             this.tasks = new _TasksCollection();
-            this.tasks.taskList = this;
+            this.tasks.url = 'https://www.googleapis.com/tasks/v1/lists/' +
+                this.get('id') + '/tasks';
         }
     });
 
