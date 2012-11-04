@@ -102,6 +102,7 @@
         template: template('#list-item-template'),
 
         initialize: function () {
+            this.tasksCollectionView = new TasksCollectionView();
             this.model.on('change:title', this.render, this);
         },
 
@@ -124,9 +125,8 @@
 
                 this.model.fetchTasks({
                     success: function (collection, response) {
-                        new TasksCollectionView({
-                            collection: collection
-                        }).render();
+                        this.tasksCollectionView.collection = collection;
+                        this.tasksCollectionView.render();
                     }
                 });
             },
