@@ -124,7 +124,7 @@
                 TaskListView.currentList = this.model;
 
                 var tasksCollectionView = this.tasksCollectionView;
-                this.model.fetchTasks({
+                this.model.tasks.fetch({
                     success: function (collection, response) {
                         tasksCollectionView.collection = collection;
                         tasksCollectionView.render();

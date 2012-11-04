@@ -23,9 +23,9 @@ describe('API endpoint integration', function () {
             newList = this.get(newList.get('id'));
             // Re-get the model instance, when the collection is reset.
             if (newList) { // Won't exist if `destroy`ed.
-                newList.on('tasks-reset', function () {
+                newList.tasks.on('reset', function () {
                     if (!newTask.isNew()) {
-                        newTask = newList.getTask(newTask.get('id'));
+                        newTask = newList.tasks.get(newTask.get('id'));
                     }
                 });
             }
@@ -76,7 +76,7 @@ describe('API endpoint integration', function () {
 
     // Fetch tasks in the new list and ensure there are none.
     testSequence.push(function (nextFn) {
-        newList.fetchTasks({
+        newList.tasks.fetch({
             success: function(collection, response) {
                 expect(collection.length).toEqual(0);
                 nextFn();
@@ -86,7 +86,7 @@ describe('API endpoint integration', function () {
 
     // Save the new task to the server, on the new list.
     testSequence.push(function (nextFn) {
-        newList.addTask(newTask);
+        newList.tasks.add(newTask);
         newTask.save({}, {
             success: function (model, response) {
                 expect(newTask.get('id')).toBeDefined();
@@ -97,7 +97,7 @@ describe('API endpoint integration', function () {
 
     // Fetch tasks in the new list and ensure there is exactly one.
     testSequence.push(function (nextFn) {
-        newList.fetchTasks({
+        newList.tasks.fetch({
             success: function(collection, response) {
                 expect(collection.length).toEqual(1);
                 nextFn();
@@ -151,7 +151,7 @@ describe('API endpoint integration', function () {
 
     // Fetch tasks in the new list again and ensure there are none.
     testSequence.push(function (nextFn) {
-        newList.fetchTasks({
+        newList.tasks.fetch({
             success: function(collection, response) {
                 expect(collection.length).toEqual(0);
                 nextFn();

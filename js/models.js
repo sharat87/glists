@@ -13,11 +13,6 @@
 
     var _TasksCollection = C.extend({
         model: TaskItem,
-        initialize: function () {
-            this.on('all', function (eventName) {
-                this.taskList.trigger('tasks-' + eventName, this);
-            });
-        },
         url: function() {
             return 'https://www.googleapis.com/tasks/v1/lists/' +
                 this.taskList.get('id') + '/tasks';
@@ -25,29 +20,10 @@
     });
 
     var TaskList = window.TaskList = M.extend({
-
         initialize: function () {
-            // FIXME: Cyclic dependency. Not sure if its bad.
-            this._tasks = new _TasksCollection();
-            this._tasks.taskList = this;
-        },
-
-        addTask: function (task) {
-            this._tasks.add(task);
-        },
-
-        getTask: function (taskId) {
-            return this._tasks.get(taskId);
-        },
-
-        fetchTasks: function (options) {
-            if (this.isNew()) {
-                // Can't get tasks if this isn't a list saved on the server.
-                throw new Error('Cannot get tasks of a new list.');
-            }
-            this._tasks.fetch(options);
+            this.tasks = new _TasksCollection();
+            this.tasks.taskList = this;
         }
-
     });
 
     var TaskListsCollection = window.TaskListsCollection = C.extend({
