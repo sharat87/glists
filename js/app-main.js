@@ -22,15 +22,4 @@ authenticated(function (auth) {
         newListTitle.val('');
     });
 
-    var newTaskForm = $('#new-task-form'),
-        newTaskTitle = newTaskForm.find('input[name=title]');
-    newTaskForm.on('submit', function (e) {
-        e.preventDefault();
-        var newTask = new TaskItem({
-            title: newTaskTitle.val(),
-            tasklist: TaskListView.currentList.get('tasklist')
-        });
-        newTask.save();
-    });
-
 });

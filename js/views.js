@@ -91,8 +91,22 @@
     });
 
     var TasksCollectionView = window.TasksCollectionView = CV.extend({
+
         el: '#tasks-container',
-        modelView: TaskView
+        modelView: TaskView,
+
+        initialize: function () {
+            if (this.collection) {
+                this.setCollection(this.collection);
+            }
+        },
+
+        setCollection: function (collection) {
+            this.collection = collection;
+            this.collection.on('reset sync', this.render, this);
+            return this;
+        }
+
     });
 
     var TaskListView = window.TaskListView = V.extend({
@@ -126,8 +140,9 @@
                 var tasksCollectionView = this.tasksCollectionView;
                 this.model.tasks.fetch({
                     success: function (collection, response) {
-                        tasksCollectionView.collection = collection;
-                        tasksCollectionView.render();
+                        tasksCollectionView
+                            .setCollection(collection)
+                            .render();
                     }
                 });
             },
@@ -165,6 +180,20 @@
         initialize: function () {
             this.collection.on('reset sync', this.render, this);
         }
+    });
+
+    // New task form handler.
+    var newTaskForm = $('#new-task-form'),
+        newTaskTitle = newTaskForm.find('input[name=title]');
+
+    newTaskForm.on('submit', function (e) {
+        e.preventDefault();
+        var newTask = new TaskItem({
+            title: newTaskTitle.val()
+        });
+        TaskListView.currentList.tasks.add(newTask);
+        newTask.save();
+        newTaskTitle.val('');
     });
 
 })();
