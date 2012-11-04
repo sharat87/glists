@@ -70,7 +70,7 @@ describe('API endpoint integration', function () {
 
     // Save the new task to the server, on the new list.
     testSequence.push(function (nextFn) {
-        newList.tasks.add(newTask);
+        newList.addTasks(newTask);
         newTask.save({}, {
             success: function (model, response) {
                 expect(newTask.get('id')).toBeDefined();

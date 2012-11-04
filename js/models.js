@@ -11,7 +11,7 @@
 
     var TaskItem = window.TaskItem = M;
 
-    var TasksCollection = window.TasksCollection = C.extend({
+    var _TasksCollection = C.extend({
         model: TaskItem,
         url: function() {
             return 'https://www.googleapis.com/tasks/v1/lists/' +
@@ -25,8 +25,12 @@
 
         initialize: function () {
             // FIXME: Cyclic dependency. Not sure if its bad.
-            this.tasks = new TasksCollection();
-            this.tasks.taskList = this;
+            this._tasks = new _TasksCollection();
+            this._tasks.taskList = this;
+        },
+
+        addTask: function(task) {
+            this._tasks.add(task);
         },
 
         fetchTasks: function (options) {
@@ -34,7 +38,7 @@
                 // Can't get tasks if this isn't a list saved on the server.
                 throw new Error('Cannot get tasks of a new list.');
             }
-            this.tasks.fetch(options);
+            this._tasks.fetch(options);
         }
 
     });
