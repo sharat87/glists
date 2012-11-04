@@ -18,7 +18,10 @@
     var TaskList = window.TaskList = M.extend({
         initialize: function () {
             this.tasks = new _TasksCollection();
-            this.tasks.url = 'https://www.googleapis.com/tasks/v1/lists/' +
+            this.tasks.url = _.bind(this.tasksUrl, this);
+        },
+        tasksUrl: function () {
+            return 'https://www.googleapis.com/tasks/v1/lists/' +
                 this.get('id') + '/tasks';
         }
     });

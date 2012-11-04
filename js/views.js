@@ -162,8 +162,8 @@
     var TaskListsCollectionView = window.TaskListsCollectionView = CV.extend({
         el: '#task-list-container',
         modelView: TaskListView,
-        initialize: function() {
-            this.collection.on('add', this.render, this);
+        initialize: function () {
+            this.collection.on('reset sync', this.render, this);
         }
     });
 
