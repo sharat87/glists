@@ -80,8 +80,7 @@
             },
 
             'change input:checkbox': function (e) {
-                var status = (this.$el.find('input:checkbox').is(':checked') ?
-                              'completed' : 'needsAction');
+                var status = (e.target.checked ? 'completed' : 'needsAction');
                 this.model.set({status: status});
                 this.model.save();
             }
