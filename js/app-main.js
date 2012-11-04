@@ -17,9 +17,9 @@ authenticated(function (auth) {
         var newList = new TaskList({
             title: newListTitle.val()
         });
+        taskListsCollection.add(newList);
         newList.save();
-        taskListsCollection.fetch();
-        return newListTitle.val('');
+        newListTitle.val('');
     });
 
     var newTaskForm = $('#new-task-form'),

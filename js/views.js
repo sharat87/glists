@@ -123,10 +123,11 @@
 
                 TaskListView.currentList = this.model;
 
+                var tasksCollectionView = this.tasksCollectionView;
                 this.model.fetchTasks({
                     success: function (collection, response) {
-                        this.tasksCollectionView.collection = collection;
-                        this.tasksCollectionView.render();
+                        tasksCollectionView.collection = collection;
+                        tasksCollectionView.render();
                     }
                 });
             },
@@ -137,9 +138,7 @@
                             this.model.get('title') + '"')) {
                     this.$el.slideUp();
                     this.model.destroy({
-                        success: function () {
-                            this.remove();
-                        }
+                        success: _.bind(this.remove, this)
                     });
                 }
             },
@@ -162,7 +161,10 @@
 
     var TaskListsCollectionView = window.TaskListsCollectionView = CV.extend({
         el: '#task-list-container',
-        modelView: TaskListView
+        modelView: TaskListView,
+        initialize: function() {
+            this.collection.on('add', this.render, this);
+        }
     });
 
 })();
