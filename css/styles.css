@@ -51,7 +51,7 @@ header .right a:hover {
     background-color: #CCC;
 }
 
-#lists-container {
+#list-panel {
     width: 300px;
     border-right: thin solid gray;
     background-color: #F7F7F7;
@@ -61,11 +61,11 @@ header .right a:hover {
     overflow: auto;
 }
 
-#lists-container:hover {
+#list-panel:hover {
     border-right-color: #333;
 }
 
-#lists-container ul {
+#list-panel ul {
     list-style: none;
     padding: 0;
 }

@@ -160,16 +160,9 @@
     TaskListView.currentList = null;
 
     var TaskListsCollectionView = window.TaskListsCollectionView = V.extend({
-        el: '#lists-container',
+        el: '#task-list-container',
 
         render: function () {
-            this.$el.html('<form id=new-task-list-form action="" ' +
-                                'method=POST>' +
-                                '<input type=text name=title ' +
-                                'placeholder="New list title">' +
-                                '<input type=submit value=Create>' +
-                                '</form>');
-
             var ulElem = $('<ul>');
 
             this.collection.forEach(function (model) {
