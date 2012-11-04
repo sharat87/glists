@@ -26,8 +26,6 @@
 
     var TaskList = window.TaskList = M.extend({
 
-        urlRoot: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
-
         initialize: function () {
             // FIXME: Cyclic dependency. Not sure if its bad.
             this._tasks = new _TasksCollection();
