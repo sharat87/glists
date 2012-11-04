@@ -3,6 +3,19 @@
     // Being lazy.
     var V = Backbone.View;
 
+    // A View class similar to `Backbone.View`, intended to be used with
+    // Collections.
+    var CV = V.extend({
+        // Render every item in `this.collection` and add it to this view's
+        // `el`. Uses the `this.modelView` class to render each item.
+        render: function () {
+            this.$el.empty().append(this.collection.map(function (model) {
+                return new this.modelView({model: model}).render().$el;
+            }, this));
+            return this;
+        }
+    });
+
     // A helper function to create template renderer functions.
     var template = function (elem) {
         var templateString = $(elem).html();
@@ -77,15 +90,9 @@
 
     });
 
-    var TasksCollectionView = window.TasksCollectionView = V.extend({
+    var TasksCollectionView = window.TasksCollectionView = CV.extend({
         el: '#tasks-container',
-        render: function () {
-            this.$el.empty();
-            this.collection.forEach(function (taskItem) {
-                new TaskView({model: taskItem}).render().$el.appendTo(this.el);
-            }, this);
-            return this;
-        }
+        modelView: TaskView
     });
 
     var TaskListView = window.TaskListView = V.extend({
@@ -153,19 +160,9 @@
     // FIXME: Need a better way to do this.
     TaskListView.currentList = null;
 
-    var TaskListsCollectionView = window.TaskListsCollectionView = V.extend({
+    var TaskListsCollectionView = window.TaskListsCollectionView = CV.extend({
         el: '#task-list-container',
-
-        render: function () {
-            this.$el.empty();
-
-            this.collection.forEach(function (model) {
-                new TaskListView({model: model}).render().$el.appendTo(this.el);
-            }, this);
-
-            return this;
-        }
-
+        modelView: TaskListView
     });
 
 })();
