@@ -32,8 +32,17 @@
 
         render: function () {
             var templateData = this.model.toJSON();
+
             templateData.checked = (templateData.status == 'completed');
+
             this.$el.html(this.template(templateData));
+
+            if (templateData.checked) {
+                this.$el.addClass('completed');
+            } else {
+                this.$el.removeClass('completed');
+            }
+
             return this;
         },
 
@@ -80,9 +89,9 @@
             },
 
             'change input:checkbox': function (e) {
-                var status = (e.target.checked ? 'completed' : 'needsAction');
-                this.model.set({status: status});
-                this.model.save();
+                this.model.save({
+                    status: e.target.checked ? 'completed' : 'needsAction'
+                });
             }
 
         }

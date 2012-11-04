@@ -125,6 +125,10 @@ header .right a:hover {
     background-color: #EEE;
 }
 
+#right-panel .task-item.completed {
+    color: #CCC;
+}
+
 #right-panel .task-item input {
     margin-right: 6px;
     -webkit-transform: scale(1.2);
