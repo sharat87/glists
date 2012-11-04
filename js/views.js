@@ -82,12 +82,7 @@
             'change input:checkbox': function (e) {
                 var status = (this.$el.find('input:checkbox').is(':checked') ?
                               'completed' : 'needsAction');
-                // Its necessary that `completed` is not present in the request
-                // and `id` is required. Rest are fine.
-                this.model.set({
-                    status: status,
-                    completed: null
-                });
+                this.model.set({status: status});
                 this.model.save();
             }
 

@@ -128,10 +128,10 @@ describe('API endpoint integration', function () {
 
     // Mark the task incomplete.
     testSequence.push(function (nextFn) {
-        newTask.save({status: 'needsAction', completed: null}, {
+        newTask.save({status: 'needsAction'}, {
             success: function (model, response) {
                 expect(newTask.get('status')).toEqual('needsAction');
-                expect(newTask.get('completed')).toBeNull();
+                expect(newTask.get('completed')).not.toBeDefined();
                 nextFn();
             }
         });

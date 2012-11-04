@@ -9,7 +9,15 @@
         return response.items;
     };
 
-    var TaskItem = window.TaskItem = M;
+    var TaskItem = window.TaskItem = M.extend({
+        initialize: function () {
+            this.on('change:status', function () {
+                if (this.get('status') === 'needsAction') {
+                    this.unset('completed');
+                }
+            });
+        }
+    });
 
     var _TasksCollection = C.extend({
         model: TaskItem
