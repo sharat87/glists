@@ -13,6 +13,11 @@
 
     var _TasksCollection = C.extend({
         model: TaskItem,
+        initialize: function () {
+            this.on('all', function (eventName) {
+                this.taskList.trigger(eventName, this);
+            });
+        },
         url: function() {
             return 'https://www.googleapis.com/tasks/v1/lists/' +
                 this.taskList.get('id') + '/tasks';
@@ -29,8 +34,12 @@
             this._tasks.taskList = this;
         },
 
-        addTask: function(task) {
+        addTask: function (task) {
             this._tasks.add(task);
+        },
+
+        getTask: function (taskId) {
+            return this._tasks.get(taskId);
         },
 
         fetchTasks: function (options) {

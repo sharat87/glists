@@ -17,6 +17,13 @@ describe('API endpoint integration', function () {
         title: 'Just get this done already!'
     });
 
+    // Re-get the model instance, when the collection is reset.
+    newList.on('reset', function () {
+        if (!newTask.isNew()) {
+            newTask = newList.getTask(newTask.get('id'));
+        }
+    });
+
     // Fetch all the lists, before we do anything.
     testSequence.push(function (nextFn) {
         taskListsCollection.fetch({
@@ -29,6 +36,7 @@ describe('API endpoint integration', function () {
 
     // Create a new list, as defined above.
     testSequence.push(function (nextFn) {
+        taskListsCollection.add(newList);
         newList.save({}, {
             success: function (model, response) {
                 expect(newList.get('id')).toBeDefined();
@@ -70,7 +78,7 @@ describe('API endpoint integration', function () {
 
     // Save the new task to the server, on the new list.
     testSequence.push(function (nextFn) {
-        newList.addTasks(newTask);
+        newList.addTask(newTask);
         newTask.save({}, {
             success: function (model, response) {
                 expect(newTask.get('id')).toBeDefined();
@@ -84,9 +92,6 @@ describe('API endpoint integration', function () {
         newList.fetchTasks({
             success: function(collection, response) {
                 expect(collection.length).toEqual(1);
-                // The `newTask` instance's knowledge of this collection is
-                // gone, since collection data is reset.
-                newTask.collection = collection;
                 nextFn();
             }
         });
