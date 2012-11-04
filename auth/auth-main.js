@@ -24,11 +24,11 @@
         window.location = chrome.extension.getURL('index.html');
     } else {
         window.location = 'https://accounts.google.com/o/oauth2/auth' +
-        '?response_type=token' +
-        '&client_id=' + CLIENT_ID +
-        '&redirect_uri=' + escape('https://www.google.com/robots.txt') +
-        '&scope=' + escape('https://www.googleapis.com/auth/tasks') +
-        '&state=glists-app-auth';
+            '?response_type=token' +
+            '&client_id=' + CLIENT_ID +
+            '&redirect_uri=' + escape('https://www.google.com/robots.txt') +
+            '&scope=' + escape('https://www.googleapis.com/auth/tasks') +
+            '&state=glists-app-auth';
     }
 
 })();
