@@ -32,9 +32,20 @@
             </form>
         </div>
 
+        <script type=text/template id=list-item-template>
+            <a href=#>
+                <span>{{ title }}</span>
+                <span class=controls>
+                    <button class=edit-btn>Edit</button>
+                    <button class=del-btn>Del</button>
+                </span>
+            </a>
+        </script>
+
         <script src=vendor/jquery-1.8.2.min.js></script>
         <script src=vendor/underscore-min.js></script>
         <script src=vendor/backbone-min.js></script>
+        <script src=vendor/mustache.js></script>
         <script src=js/primer.js></script>
         <script src=auth/auth-lib.js></script>
         <script src=js/models.js></script>

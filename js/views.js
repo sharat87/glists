@@ -9,6 +9,13 @@
         return this.rootElem.empty().append(this.$el);
     };
 
+    var template = function (elem) {
+        var templateString = $(elem).html();
+        return function (data) {
+            return Mustache.render(templateString, data);
+        };
+    };
+
     var TaskView = window.TaskView = V.extend({
         tagName: 'div',
         className: 'task-item',
@@ -94,18 +101,14 @@
         tagName: 'li',
         className: 'task-list-item',
 
+        template: template('#list-item-template'),
+
         initialize: function () {
             this.model.on('change:title', this.render, this);
         },
 
         render: function () {
-            this.el.innerHTML = '<a href=#>' +
-                              '<span>' + this.model.get('title') + '</span>' +
-                              '<span class=controls>' +
-                              '<button class=edit-btn>Edit</button>' +
-                              '<button class=del-btn>Del</button>' +
-                              '</span>' +
-                              '</a>';
+            this.$el.html(this.template(this.model.toJSON()));
             return this;
         },
 
