@@ -12,20 +12,21 @@
     var TaskItem = window.TaskItem = M;
 
     var TasksCollection = window.TasksCollection = C.extend({
-        model: TaskItem
+        model: TaskItem,
+        url: function() {
+            return 'https://www.googleapis.com/tasks/v1/lists/' +
+                this.taskList.get('id') + '/tasks';
+        }
     });
 
     var TaskList = window.TaskList = M.extend({
 
-        initialize: function () {
-            this.tasks = new TasksCollection();
-        },
+        urlRoot: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
 
-        url: function () {
-            // If there is no `selfLink`, this must be a new TaskList. We use
-            // the empty create url.
-            return this.get('selfLink') ||
-                'https://www.googleapis.com/tasks/v1/users/@me/lists/';
+        initialize: function () {
+            // FIXME: Cyclic dependency. Not sure if its bad.
+            this.tasks = new TasksCollection();
+            this.tasks.taskList = this;
         },
 
         fetchTasks: function (options) {
@@ -33,8 +34,6 @@
                 // Can't get tasks if this isn't a list saved on the server.
                 throw new Error('Cannot get tasks of a new list.');
             }
-            this.tasks.url = 'https://www.googleapis.com/tasks/v1/lists/' +
-                this.get('id') + '/tasks';
             this.tasks.fetch(options);
         }
 
