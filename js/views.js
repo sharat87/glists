@@ -28,18 +28,12 @@
         tagName: 'div',
         className: 'task-item',
 
+        template: template('#task-item-template'),
+
         render: function () {
-            var _this = this;
-            this.$el.html('<input type=checkbox' +
-                          (this.model.get('status') == 'completed' ?
-                           ' checked' : '') +
-                          '><div class=title contenteditable>' +
-                          this.model.get('title') + '</div>');
-            this.$el.find('.title').on('focus', function () {
-                return _this.$el.addClass('editing');
-            }).on('blur', function () {
-                return _this.doneEditing();
-            });
+            var templateData = this.model.toJSON();
+            templateData.checked = (templateData.status == 'completed');
+            this.$el.html(this.template(templateData));
             return this;
         },
 
@@ -58,6 +52,15 @@
         },
 
         events: {
+
+            'focus .title': function (e) {
+                this.$el.addClass('editing');
+            },
+
+            'blur .title': function (e) {
+                this.doneEditing();
+            },
+
             'keydown .title': function (e) {
                 if (e.which === 13) {
                     console.info(e);
@@ -75,6 +78,7 @@
                     this.$el.find('.title').blur();
                 }
             },
+
             'change input:checkbox': function (e) {
                 var status = (this.$el.find('input:checkbox').is(':checked') ?
                               'completed' : 'needsAction');
@@ -86,6 +90,7 @@
                 });
                 this.model.save();
             }
+
         }
 
     });

@@ -42,6 +42,11 @@
             </a>
         </script>
 
+        <script type=text/template id=task-item-template>
+            <input type=checkbox {{ #checked }}checked{{ /checked }}>
+            <div class=title contenteditable>{{ title }}</div>
+        </script>
+
         <script src=vendor/jquery-1.8.2.min.js></script>
         <script src=vendor/underscore-min.js></script>
         <script src=vendor/backbone-min.js></script>
