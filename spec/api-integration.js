@@ -1,7 +1,7 @@
 describe('API endpoint integration', function () {
 
     var testSequence = [], // The sequence of calling the test functions.
-        testSequenceTimeout = 15000, // Timeout to wait for the tests.
+        testSequenceTimeout = 17000, // Timeout to wait for the tests.
         initialListCount = 0;
 
     // The master collection of all the task lists.
@@ -132,6 +132,16 @@ describe('API endpoint integration', function () {
             success: function (model, response) {
                 expect(newTask.get('status')).toEqual('needsAction');
                 expect(newTask.get('completed')).not.toBeDefined();
+                nextFn();
+            }
+        });
+    });
+
+    // Mark the task incomplete.
+    testSequence.push(function (nextFn) {
+        newTask.save({notes: 'will do'}, {
+            success: function (model, response) {
+                expect(newTask.get('notes')).toEqual('will do');
                 nextFn();
             }
         });
