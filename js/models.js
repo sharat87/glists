@@ -9,7 +9,7 @@
         return response.items;
     };
 
-    var TaskItem = window.TaskItem = M.extend();
+    var TaskItem = window.TaskItem = M;
 
     var TasksCollection = window.TasksCollection = C.extend({
         model: TaskItem
