@@ -1,7 +1,7 @@
 describe('API endpoint integration', function () {
 
     var testSequence = [], // The sequence of calling the test functions.
-        testSequenceTimeout = 25000, // Timeout to wait for the tests.
+        testSequenceTimeout = 15000, // Timeout to wait for the tests.
         initialListCount = 0;
 
     // The master collection of all the task lists.
@@ -17,10 +17,18 @@ describe('API endpoint integration', function () {
         title: 'Just get this done already!'
     });
 
-    // Re-get the model instance, when the collection is reset.
-    newList.on('tasks-reset', function () {
-        if (!newTask.isNew()) {
-            newTask = newList.getTask(newTask.get('id'));
+    // Re-get the list instance, when the lists collection is reset.
+    taskListsCollection.on('reset', function () {
+        if (!newList.isNew()) {
+            newList = this.get(newList.get('id'));
+            // Re-get the model instance, when the collection is reset.
+            if (newList) { // Won't exist if `destroy`ed.
+                newList.on('tasks-reset', function () {
+                    if (!newTask.isNew()) {
+                        newTask = newList.getTask(newTask.get('id'));
+                    }
+                });
+            }
         }
     });
 
