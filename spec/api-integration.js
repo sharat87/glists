@@ -18,7 +18,7 @@ describe('API endpoint integration', function () {
     });
 
     // Re-get the model instance, when the collection is reset.
-    newList.on('reset', function () {
+    newList.on('tasks-reset', function () {
         if (!newTask.isNew()) {
             newTask = newList.getTask(newTask.get('id'));
         }

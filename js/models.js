@@ -15,7 +15,7 @@
         model: TaskItem,
         initialize: function () {
             this.on('all', function (eventName) {
-                this.taskList.trigger(eventName, this);
+                this.taskList.trigger('tasks-' + eventName, this);
             });
         },
         url: function() {
