@@ -3,12 +3,7 @@
     // Being lazy.
     var V = Backbone.View;
 
-    // A helper function on views for rendering and placing into the DOM.
-    V.prototype.renderAndApply = function () {
-        this.render();
-        return this.rootElem.empty().append(this.$el);
-    };
-
+    // A helper function to create template renderer functions.
     var template = function (elem) {
         var templateString = $(elem).html();
         return function (data) {
@@ -83,15 +78,11 @@
     });
 
     var TasksCollectionView = window.TasksCollectionView = V.extend({
-        tagName: 'div',
-        className: 'task-list',
-        rootElem: $('#tasks-container'),
+        el: '#tasks-container',
         render: function () {
+            this.$el.empty();
             this.collection.forEach(function (taskItem) {
-                var view = new TaskView({
-                    model: taskItem
-                });
-                this.$el.append(view.render().el);
+                new TaskView({model: taskItem}).render().$el.appendTo(this.el);
             }, this);
             return this;
         }
@@ -128,7 +119,7 @@
                     success: function (collection, response) {
                         new TasksCollectionView({
                             collection: collection
-                        }).renderAndApply();
+                        }).render();
                     }
                 });
             },
@@ -166,13 +157,11 @@
         el: '#task-list-container',
 
         render: function () {
-            var ulElem = $('<ul>');
+            this.$el.empty();
 
             this.collection.forEach(function (model) {
-                new TaskListView({model: model}).render().$el.appendTo(ulElem);
-            });
-
-            this.$el.append(ulElem);
+                new TaskListView({model: model}).render().$el.appendTo(this.el);
+            }, this);
 
             return this;
         }
