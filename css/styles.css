@@ -58,7 +58,6 @@ header .right a:hover {
     height: 100%;
     padding-top: 56px;
     float: left;
-    overflow: auto;
 }
 
 #list-panel:hover {
@@ -113,28 +112,44 @@ header .right a:hover {
 #right-panel {
     margin-left: 300px;
     padding-top: 56px;
-    overflow: auto;
 }
 
 #right-panel .task-item {
     padding: 6px 12px;
-    overflow: auto;
+    position: relative;
 }
 
 #right-panel .task-item.completed {
     color: #CCC;
 }
 
-#right-panel .task-item .notes-indicator {
+#right-panel .task-item.editing {
+    background-color: #EEE;
+}
+
+#right-panel .task-item .notes {
+    display: none;
+    font-family: Oxygen, sans-serif;
+    font-size: .9em;
+    position: absolute;
+    border: thin solid #EEE;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .1);
+    background-color: white;
+    padding: 6px 12px;
+    margin-top: -1px;
+    left: 120px;
+    top: 100%;
+    width: 340px;
+}
+
+#right-panel .task-item.editing .notes {
+    display: block;
 }
 
 #right-panel .task-item input {
     margin-right: 6px;
     -webkit-transform: scale(1.2);
-}
-
-#right-panel .task-item.editing {
-    background-color: #EEE;
 }
 
 #right-panel .task-item .title:focus {
