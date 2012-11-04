@@ -121,24 +121,20 @@ header .right a:hover {
     overflow: auto;
 }
 
-#right-panel .task-item.editing {
-    background-color: #EEE;
-}
-
 #right-panel .task-item.completed {
     color: #CCC;
+}
+
+#right-panel .task-item .notes-indicator {
 }
 
 #right-panel .task-item input {
     margin-right: 6px;
     -webkit-transform: scale(1.2);
-    float: left;
 }
 
-#right-panel .task-item .title {
-    float: left;
-    margin-left: 12px;
-    min-width: 85%;
+#right-panel .task-item.editing {
+    background-color: #EEE;
 }
 
 #right-panel .task-item .title:focus {
