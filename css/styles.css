@@ -132,15 +132,17 @@ header .right a:hover {
     font-family: Oxygen, sans-serif;
     font-size: .9em;
     position: absolute;
-    border: thin solid #EEE;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #EEE #CCC #CCC;
     border-radius: 0 0 4px 4px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, .1);
-    background-color: white;
     padding: 6px 12px;
     margin-top: -1px;
     left: 120px;
     top: 100%;
     width: 340px;
+    z-index: 10;
 }
 
 #right-panel .task-item.editing .notes {
