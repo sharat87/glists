@@ -74,17 +74,18 @@
 
             this.$el.addClass('editing').css('z-index', 30);
 
-            this.mask = $('<div/>').appendTo(document.body);
-
-            this.mask.css({
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                'background-color': 'rgba(0, 0, 0, .4)',
-                width: '100%',
-                height: '100%',
-                'z-index': 20
-            }).on('click', _.bind(this.doneEditing, this));
+            this.mask = $('<div/>', {
+                    click: _.bind(this.doneEditing, this),
+                    css: {
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        'z-index': 20,
+                        'background-color': 'rgba(0, 0, 0, .4)'
+                    }
+                }).appendTo(document.body);
 
         },
 
