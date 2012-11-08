@@ -61,6 +61,9 @@
         },
 
         startEditing: function () {
+            if (this.$el.hasClass('editing')) {
+                return;
+            }
             var self = this;
             this.$el.addClass('editing');
             var mask = $('<div/>').appendTo(document.body);
@@ -74,7 +77,8 @@
                 'z-index': 20
             }).on('click', function () {
                 $(this).remove();
-                self.$el.removeClass('editing').css('z-index', 'auto');
+                self.$el.css('z-index', 'auto');
+                self.doneEditing();
             });
             this.$el.css('z-index', 30);
         },
