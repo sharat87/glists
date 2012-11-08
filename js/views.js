@@ -51,7 +51,12 @@
                 newStatus = (this.$el.find('input:checkbox').is(':checked') ?
                              'completed' : 'needsAction');
 
-            this.$el.removeClass('editing');
+            this.$el
+                .removeClass('editing')
+                .css('z-index', 'auto')
+                .find('.title').blur();
+
+            this.mask.remove();
 
             if (newTitle !== this.model.get('title') ||
                     newStatus !== this.model.get('status')) {
@@ -61,13 +66,17 @@
         },
 
         startEditing: function () {
+            var self = this;
+
             if (this.$el.hasClass('editing')) {
                 return;
             }
-            var self = this;
-            this.$el.addClass('editing');
-            var mask = $('<div/>').appendTo(document.body);
-            mask.css({
+
+            this.$el.addClass('editing').css('z-index', 30);
+
+            this.mask = $('<div/>').appendTo(document.body);
+
+            this.mask.css({
                 position: 'fixed',
                 top: 0,
                 left: 0,
@@ -75,23 +84,16 @@
                 width: '100%',
                 height: '100%',
                 'z-index': 20
-            }).on('click', function () {
-                $(this).remove();
-                self.$el.css('z-index', 'auto');
-                self.doneEditing();
-            });
-            this.$el.css('z-index', 30);
+            }).on('click', _.bind(this.doneEditing, this));
+
         },
 
         events: {
 
-            'focus .title': function (e) {
-                this.startEditing();
-            },
+            'focus .title': 'startEditing',
 
             'keydown .title': function (e) {
                 if (e.which === 13) {
-                    console.info(e);
                     e.preventDefault();
 
                     if (e.ctrlKey) {
@@ -103,7 +105,7 @@
                         // New task before current.
                     }
 
-                    this.$el.find('.title').blur();
+                    this.doneEditing();
                 }
             },
 
