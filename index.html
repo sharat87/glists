@@ -46,7 +46,16 @@
             <span class=notes-indicator>{{#notes}} &#9385; {{/notes}}</span>
             <input type=checkbox {{#checked}} checked {{/checked}}>
             <span class=title contenteditable>{{title}}</span>
-            <textarea placeholder=Notes class=notes>{{notes}}</textarea>
+            <div class=task-fields>
+                <label>
+                    <span>Notes:</span>
+                    <textarea placeholder=Notes class=notes>{{notes}}</textarea>
+                </label>
+                <label>
+                    <span>Due:</span>
+                    <input type=date class=due-date>
+                </label>
+            </div>
         </script>
 
         <script src=vendor/jquery-1.8.2.min.js></script>

@@ -60,14 +60,29 @@
             }
         },
 
+        startEditing: function () {
+            var self = this;
+            this.$el.addClass('editing');
+            var mask = $('<div/>').appendTo(document.body);
+            mask.css({
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                'background-color': 'rgba(0, 0, 0, .4)',
+                width: '100%',
+                height: '100%',
+                'z-index': 20
+            }).on('click', function () {
+                $(this).remove();
+                self.$el.removeClass('editing').css('z-index', 'auto');
+            });
+            this.$el.css('z-index', 30);
+        },
+
         events: {
 
             'focus .title': function (e) {
-                this.$el.addClass('editing');
-            },
-
-            'blur .title': function (e) {
-                this.doneEditing();
+                this.startEditing();
             },
 
             'keydown .title': function (e) {
