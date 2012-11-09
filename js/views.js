@@ -47,8 +47,8 @@
         },
 
         doneEditing: function () {
-            var newTitle = this.$el.find('.title').text(),
-                newStatus = (this.$el.find('input:checkbox').is(':checked') ?
+            var newTitle = this.$('.title').text(),
+                newStatus = (this.$('input:checkbox').is(':checked') ?
                              'completed' : 'needsAction');
 
             this.$el
