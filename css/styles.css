@@ -134,6 +134,7 @@ header .right a:hover {
     padding: 6px;
     border: 1px solid #EEE;
     border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .6);
     background-color: white;
     top: 100%;
     left: 120px;
