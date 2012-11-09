@@ -93,25 +93,9 @@
 
             'focus .title': 'startEditing',
 
-            'keydown .title': function (e) {
+            'keydown .title,.due-date': function (e) {
                 if (e.which === 13) {
                     e.preventDefault();
-
-                    if (e.ctrlKey) {
-                        // New task after current.
-                        var newTask = new TaskItem({
-                            tasklist: this.get('tasklist')
-                        });
-                    } else if (e.shiftKey) {
-                        // New task before current.
-                    }
-
-                    this.doneEditing();
-                }
-            },
-
-            'keydown .due-date': function (e) {
-                if (e.which === 13) {
                     this.doneEditing();
                 }
             },
