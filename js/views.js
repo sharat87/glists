@@ -110,6 +110,18 @@
                 }
             },
 
+            'keydown .due-date': function (e) {
+                if (e.which === 13) {
+                    this.doneEditing();
+                }
+            },
+
+            'keydown .notes': function (e) {
+                if (e.which === 13 && e.ctrlKey) {
+                    this.doneEditing();
+                }
+            },
+
             'change input:checkbox': function (e) {
                 this.model.save({
                     status: e.target.checked ? 'completed' : 'needsAction'
