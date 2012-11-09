@@ -35,6 +35,16 @@
 
             templateData.checked = (templateData.status == 'completed');
 
+            var due = this.model.get('due');
+            if (due) {
+                due = new Date(due);
+                templateData.due = {
+                    date: due.getDate(),
+                    month: due.getMonth(),
+                    year: due.getFullYear()
+                };
+            }
+
             this.$el.html(this.template(templateData));
 
             if (templateData.checked) {
