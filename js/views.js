@@ -48,6 +48,7 @@
 
         doneEditing: function () {
             var newTitle = this.$('.title').text(),
+                newNotes = this.$('.notes').val(),
                 newStatus = (this.$('input:checkbox').is(':checked') ?
                              'completed' : 'needsAction');
 
@@ -59,9 +60,13 @@
             this.mask.remove();
 
             if (newTitle !== this.model.get('title') ||
+                    newNotes !== this.model.get('notes') ||
                     newStatus !== this.model.get('status')) {
-                this.model.set({title: newTitle, status: newStatus});
-                return this.model.save();
+                this.model.save({
+                    title: newTitle,
+                    status: newStatus,
+                    notes: newNotes
+                });
             }
         },
 
