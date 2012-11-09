@@ -16,6 +16,11 @@
                     this.unset('completed');
                 }
             });
+        },
+        parse: function (response) {
+            response.notes = response.notes || '';
+            response.due = response.due || '';
+            return response;
         }
     });
 
