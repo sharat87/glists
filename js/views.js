@@ -38,11 +38,11 @@
             var due = this.model.get('due');
             if (due) {
                 due = new Date(due);
-                templateData.due = {
-                    date: due.getDate(),
-                    month: due.getMonth(),
-                    year: due.getFullYear()
+                var pad = function (val) {
+                    return (val < 10 ? '0' : '') + val;
                 };
+                templateData.dueStr = due.getUTCFullYear() + '-' +
+                    pad(due.getUTCMonth() + 1) + '-' + pad(due.getUTCDate());
             }
 
             this.$el.html(this.template(templateData));
@@ -59,6 +59,7 @@
         doneEditing: function () {
             var newTitle = this.$('.title').text(),
                 newNotes = this.$('.notes').val(),
+                newDue = this.$('.due-date').val(),
                 newStatus = (this.$('input:checkbox').is(':checked') ?
                              'completed' : 'needsAction');
 
@@ -71,11 +72,13 @@
 
             if (newTitle !== this.model.get('title') ||
                     newNotes !== this.model.get('notes') ||
+                    newDue !== this.model.get('due') ||
                     newStatus !== this.model.get('status')) {
                 this.model.save({
                     title: newTitle,
                     status: newStatus,
-                    notes: newNotes
+                    notes: newNotes,
+                    due: new Date(newDue).toISOString()
                 });
             }
         },
