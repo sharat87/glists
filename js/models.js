@@ -10,6 +10,7 @@
     };
 
     var TaskItem = window.TaskItem = M.extend({
+
         initialize: function () {
             this.on('change:status', function () {
                 if (this.get('status') === 'needsAction') {
@@ -17,11 +18,23 @@
                 }
             });
         },
+
         parse: function (response) {
             response.notes = response.notes || '';
-            response.due = response.due || '';
+            response.due = response.due || null;
             return response;
+        },
+
+        toJSON: function () {
+            var task = M.prototype.toJSON.call(this);
+
+            if (!task.due) {
+                task.due = null;
+            }
+
+            return task;
         }
+
     });
 
     var _TasksCollection = C.extend({
