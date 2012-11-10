@@ -78,7 +78,7 @@
                     title: newTitle,
                     status: newStatus,
                     notes: newNotes,
-                    due: new Date(newDue).toISOString()
+                    due: newDue ? new Date(newDue).toISOString() : null
                 });
             }
         },
