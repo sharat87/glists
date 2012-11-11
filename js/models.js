@@ -21,17 +21,13 @@
 
         parse: function (response) {
             response.notes = response.notes || '';
-            response.due = response.due || null;
+            response.due = asAdate(response.due);
             return response;
         },
 
         toJSON: function () {
             var task = M.prototype.toJSON.call(this);
-
-            if (!task.due) {
-                task.due = null;
-            }
-
+            task.due = task.due ? task.due.toISOString() : null;
             return task;
         }
 

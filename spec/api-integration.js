@@ -147,6 +147,17 @@ describe('API endpoint integration', function () {
         });
     });
 
+    // Mark the task incomplete.
+    testSequence.push(function (nextFn) {
+        var date = new ADate();
+        newTask.save({due: date}, {
+            success: function (model, response) {
+                expect(newTask.get('due')).toEqual(date);
+                nextFn();
+            }
+        });
+    });
+
     // TODO: Test updates to: parent, position, notes, hidden, links.
 
     // Delete the task.
