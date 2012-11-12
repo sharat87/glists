@@ -17,7 +17,7 @@
     });
 
     // A helper function to create template renderer functions.
-    var template = function (elem) {
+    var mktemplate = function (elem) {
         var templateString = $(elem).html();
         return function (data) {
             return Mustache.render(templateString, data);
@@ -28,7 +28,7 @@
         tagName: 'div',
         className: 'task-item',
 
-        template: template('#task-item-template'),
+        template: mktemplate('#task-item-template'),
 
         render: function () {
             var templateData = this.model.toJSON();
@@ -150,7 +150,7 @@
         tagName: 'li',
         className: 'task-list-item',
 
-        template: template('#list-item-template'),
+        template: mktemplate('#list-item-template'),
 
         initialize: function () {
             this.tasksCollectionView = new TasksCollectionView();
