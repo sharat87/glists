@@ -17,6 +17,14 @@
                     this.unset('completed');
                 }
             });
+
+            this.on('change:parent change:previous', function () {
+                this.positionChanged = true;
+            }, this);
+
+            this.on('sync', function () {
+                this.positionChanged = false;
+            });
         },
 
         parse: function (response) {

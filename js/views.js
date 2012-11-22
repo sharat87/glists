@@ -76,6 +76,10 @@
 
             this.mask.remove();
 
+            if (this.model.positionChanged) {
+                console.warn('Saving changes to position is not done yet!');
+            }
+
             if (newTitle !== this.model.get('title') ||
                     newNotes !== this.model.get('notes') ||
                     !ADate.areEqual(newDue, this.model.get('due')) ||
