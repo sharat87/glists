@@ -38,6 +38,34 @@
             } else {
                 return 0;
             }
+        },
+
+        indent: function () {
+            var currentIndent = this.getIndentLevel(),
+                index = this.collection.indexOf(this);
+
+            for (var i = index - 1; i >= 0; i--) {
+
+                var target = this.collection.at(i),
+                    targetIndent = target.getIndentLevel();
+
+                if (targetIndent === currentIndent) {
+                    this.set('parent', target.get('id'));
+                    break;
+                } else if (targetIndent < currentIndent) {
+                    break;
+                }
+
+            }
+        },
+
+        dedent: function () {
+            var parentId = this.get('parent');
+            if (parentId) {
+                this.set({
+                    parent: this.collection.get(parentId).get('parent')
+                });
+            }
         }
 
     });

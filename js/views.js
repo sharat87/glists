@@ -30,6 +30,11 @@
 
         template: mktemplate('#task-item-template'),
 
+        initialize: function () {
+            this.model.on('change:parent', this.updateIndent, this);
+            this.model.on('destroy', this.remove, this);
+        },
+
         render: function () {
             var templateData = this.model.toJSON();
 
@@ -46,11 +51,15 @@
                 this.$el.removeClass('completed');
             }
 
+            this.updateIndent();
+
+            return this;
+        },
+
+        updateIndent: function () {
             this.$el.css({
                 'margin-left': 1.5 * this.model.getIndentLevel() + 'em'
             });
-
-            return this;
         },
 
         doneEditing: function () {
@@ -112,6 +121,18 @@
                 if (e.which === 13) {
                     e.preventDefault();
                     this.doneEditing();
+                }
+            },
+
+            'keydown .title': function (e) {
+                // Tab key for indentation changes.
+                if (e.which === 9) {
+                    e.preventDefault();
+                    if (e.shiftKey) {
+                        this.model.dedent();
+                    } else {
+                        this.model.indent();
+                    }
                 }
             },
 
