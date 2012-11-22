@@ -46,6 +46,10 @@
                 this.$el.removeClass('completed');
             }
 
+            this.$el.css({
+                'margin-left': 1.5 * this.model.getIndentLevel() + 'em'
+            });
+
             return this;
         },
 

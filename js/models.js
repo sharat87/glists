@@ -29,6 +29,15 @@
             var task = M.prototype.toJSON.call(this);
             task.due = task.due ? task.due.toISOString() : null;
             return task;
+        },
+
+        getIndentLevel: function () {
+            var parentId = this.get('parent');
+            if (parentId) {
+                return this.collection.get(parentId).getIndentLevel() + 1;
+            } else {
+                return 0;
+            }
         }
 
     });
