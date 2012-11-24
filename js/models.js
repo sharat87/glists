@@ -22,6 +22,7 @@
                 parent: attrs.parent,
                 position: attrs.position
             });
+            this.position.task = this;
         },
 
         parse: function (response, xhr) {
@@ -29,7 +30,8 @@
             response.due = asAdate(response.due);
 
             // Ignore the position attributes if we already have a
-            // `this.position`.
+            // `this.position`. Note that these values, even if set, are unused,
+            // so removing this piece of code should have no effect.
             if (this.position) {
                 delete response.parent;
                 delete response.position;
@@ -105,18 +107,60 @@
     });
 
     var TaskPosition = M.extend({
+
         initialize: function () {
             this.on('change:parent change:previous', function () {
                 this._dirty = true;
-                console.info('dirtying');
             }, this);
+
             this.on('sync', function () {
-                console.info('un-dirtying');
                 this._dirty = false;
             }, this);
         },
+
         isDirty: function () {
             return this._dirty;
+        },
+
+        saveIfDirty: function () {
+            if (this.isDirty()) {
+                return M.prototype.save.apply(this, arguments);
+            }
+        },
+
+        parse: function (response) {
+            return {
+                parent: response.parent,
+                position: response.position
+            };
+        },
+
+        toJSON: function () {
+            return {
+                parent: this.get('parent'),
+                previous: this.get('previous')
+            };
+        },
+
+        sync: function (method, model, options) {
+            options.data = ' ';
+            options.url = this.task.url() + '/move';
+
+            var qs = [];
+            if (this.has('parent')) {
+                qs.push('parent=' + encodeURIComponent(this.get('parent')));
+            }
+
+            if (this.has('previous')) {
+                qs.push('previous=' + encodeURIComponent(this.get('previous')));
+            }
+
+            if (qs) {
+                options.url += '?' + qs.join('&');
+                return Backbone.sync.apply(this, arguments);
+            } else {
+                return;
+            }
         }
     });
 
