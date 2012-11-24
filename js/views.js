@@ -31,7 +31,7 @@
         template: mktemplate('#task-item-template'),
 
         initialize: function () {
-            this.model.on('change:parent', this.updateIndent, this);
+            this.model.position.on('change:parent', this.updateIndent, this);
             this.model.on('destroy', this.remove, this);
         },
 
