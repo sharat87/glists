@@ -47,25 +47,6 @@
             return task;
         },
 
-        _save: function (attrs, options) {
-            var position = {
-                parent: this.get('parent'),
-                previous: this.get('previous')
-            };
-
-            var self = this, success = options.success;
-            options.success = function () {
-                if (self.positionChanged) {
-                    self.save(position);
-                }
-                if (success) {
-                    success.apply(self, arguments);
-                }
-            };
-
-            M.prototype.save.call(this, attrs, options);
-        },
-
         getIndentLevel: function () {
             var parentId = this.position.get('parent');
             if (parentId) {
@@ -92,6 +73,8 @@
                 }
 
             }
+
+            this.calculatePrevious();
         },
 
         dedent: function () {
@@ -101,6 +84,30 @@
                 this.position.set({
                     parent: parent.position.get('parent')
                 });
+            }
+            this.calculatePrevious();
+        },
+
+        calculatePrevious: function () {
+            var currentIndent = this.getIndentLevel(),
+                index = this.collection.indexOf(this);
+
+            for (var i = index - 1; i >= 0; i--) {
+
+                var target = this.collection.at(i),
+                    targetIndent = target.getIndentLevel();
+
+                if (targetIndent === currentIndent) {
+                    this.position.set('previous', target.get('id'));
+                    break;
+                } else if (targetIndent < currentIndent) {
+                    this.position.set('previous', null);
+                    break;
+                }
+            }
+
+            if (i < 0) {
+                this.position.set('previous', null);
             }
         }
 
@@ -146,13 +153,16 @@
             options.data = ' ';
             options.url = this.task.url() + '/move';
 
-            var qs = [];
-            if (this.has('parent')) {
-                qs.push('parent=' + encodeURIComponent(this.get('parent')));
+            var qs = [],
+                parent = this.get('parent'),
+                previous = this.get('previous');
+
+            if (parent) {
+                qs.push('parent=' + encodeURIComponent(parent));
             }
 
-            if (this.has('previous')) {
-                qs.push('previous=' + encodeURIComponent(this.get('previous')));
+            if (previous) {
+                qs.push('previous=' + encodeURIComponent(previous));
             }
 
             if (qs) {
