@@ -113,6 +113,8 @@
                     }
                 }).appendTo(document.body);
 
+            this.$('.title').focus();
+
         },
 
         events: {
@@ -258,6 +260,17 @@
         TaskListView.currentList.tasks.add(newTask);
         newTask.save();
         newTaskTitle.val('');
+    });
+
+    // New task toolbar button.
+    var addTaskButton = $('#add-task-btn');
+
+    addTaskButton.click(function () {
+        var task = new TaskItem(),
+            view = new TaskView({model: task});
+        TaskListView.currentList.tasks.add(task, {at: 0});
+        $('#tasks-container').prepend(view.render().el);
+        view.startEditing();
     });
 
 })();

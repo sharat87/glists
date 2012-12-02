@@ -19,8 +19,8 @@
             });
 
             this.position = new TaskPosition({
-                parent: attrs.parent,
-                position: attrs.position
+                parent: attrs && attrs.parent,
+                position: attrs && attrs.position
             });
             this.position.task = this;
         },
