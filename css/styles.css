@@ -3,8 +3,8 @@
 ::-webkit-scrollbar {
     border: none !important;
     background-color: transparent !important;
-    width: 8px !important;
-    height: 8px !important;
+    width: 6px !important;
+    height: 6px !important;
 }
 
 ::-webkit-scrollbar-thumb {
