@@ -192,6 +192,11 @@
     var TaskListsCollection = window.TaskListsCollection = C.extend({
         model: TaskList,
         url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
+        initialize: function () {
+            this.on('change', function () {
+                this.sort();
+            }, this);
+        },
         comparator: function (taskList) {
             return taskList.get('title').toLowerCase();
         }
