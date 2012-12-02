@@ -107,21 +107,25 @@ section > header {
     padding-bottom: 48px;
 }
 
-#right-panel header .right {
-    display: inline-block;
-    float: right;
-}
-
-#right-panel header .right a {
+#right-panel header button {
     color: #CCC;
     text-decoration: none;
     padding: 3px 6px;
     border-radius: 2px;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-family: Gentium, serif;
+    font-size: 1.1em;
 }
 
-#right-panel header .right a:hover {
+#right-panel header button:hover {
     color: #333;
     background-color: #CCC;
+}
+
+#right-panel header button:active {
+    -webkit-transform: translatey(1px);
 }
 
 #right-panel .task-item {

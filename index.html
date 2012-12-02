@@ -14,6 +14,12 @@
                 <h1>Glists</h1>
             </header>
             <div id=left-body>
+                <!-- Should only be present for debugging purposes. -->
+                <a href=spec-runner.html style="display: block;
+                    margin-top: 6px; padding: 3px 6px; text-decoration: none;
+                    background: #BBB; color: #333;">
+                    Spec runner
+                </a>
                 <ul id=task-list-container></ul>
                 <form id=new-task-list-form action="" method=POST>
                     <input type=text name=title placeholder="New list title">
@@ -23,11 +29,11 @@
         </section>
 
         <section id=right-panel>
+
             <header>
-                <div class=right>
-                    <a href=spec-runner.html>Spec runner</a>
-                </div>
+                <button id=add-task-btn>Add Task</button>
             </header>
+
             <div id=right-body>
                 <div id=tasks-container>Please select a list in the left.</div>
                 <form id=new-task-form action="" method=POST>
@@ -35,6 +41,7 @@
                     <input type=submit value=Add>
                 </form>
             </div>
+
         </section>
 
         <script type=text/template id=list-item-template>
