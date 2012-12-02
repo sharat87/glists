@@ -1,5 +1,17 @@
 @import url("http://fonts.googleapis.com/css?family=Oxygen|Gentium");
 
+::-webkit-scrollbar {
+    border: none !important;
+    background-color: transparent !important;
+    width: 8px !important;
+    height: 8px !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #333 !important;
+    border: none !important;
+}
+
 html, body {
     margin: 0;
     width: 100%;
@@ -14,54 +26,29 @@ html, body, div {
     box-sizing: border-box;
 }
 
-header {
+section > header {
+    background-color: #333;
     font-family: Gentium;
-    width: 100%;
-    background: #333;
     color: #CCC;
-    -webkit-box-shadow: 0 -1px #cccccc;
-    position: fixed;
-    top: 0;
-    height: 56px;
-    line-height: 56px;
+    height: 48px;
+    line-height: 48px;
     padding: 0 12px;
-}
-
-header h1 {
-    margin: 0;
-    float: left;
-}
-
-header .right {
-    display: inline-block;
-    float: right;
-    padding-right: 40px;
-}
-
-header .right a {
-    color: #CCC;
-    text-decoration: none;
-    padding: 3px 6px;
-    border-radius: 2px;
-    font-size: 1.1em;
-}
-
-header .right a:hover {
-    color: #333;
-    background-color: #CCC;
 }
 
 #list-panel {
     width: 300px;
-    border-right: thin solid gray;
+    border-right: thin solid #333;
     background-color: #F7F7F7;
     height: 100%;
-    padding-top: 56px;
     float: left;
 }
 
-#list-panel:hover {
-    border-right-color: #333;
+#left-body {
+    overflow: auto;
+}
+
+#list-panel header h1 {
+    margin: 0;
 }
 
 #list-panel ul {
@@ -110,8 +97,30 @@ header .right a:hover {
 }
 
 #right-panel {
-    margin-left: 300px;
-    padding-top: 56px;
+    margin-left: 301px;
+    position: relative;
+}
+
+#right-body {
+    overflow: auto;
+    width: 100%;
+}
+
+#right-panel header .right {
+    display: inline-block;
+    float: right;
+}
+
+#right-panel header .right a {
+    color: #CCC;
+    text-decoration: none;
+    padding: 3px 6px;
+    border-radius: 2px;
+}
+
+#right-panel header .right a:hover {
+    color: #333;
+    background-color: #CCC;
 }
 
 #right-panel .task-item {
