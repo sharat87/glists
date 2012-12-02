@@ -69,12 +69,7 @@
                 newStatus = (this.$('input:checkbox').is(':checked') ?
                              'completed' : 'needsAction');
 
-            this.$el
-                .removeClass('editing')
-                .css('z-index', 'auto')
-                .find('.title').blur();
-
-            this.mask.remove();
+            this.closeEditing();
 
             if (newTitle !== this.model.get('title') ||
                     newNotes !== this.model.get('notes') ||
@@ -117,6 +112,14 @@
 
         },
 
+        closeEditing: function () {
+            this.$el
+                .removeClass('editing')
+                .css('z-index', 'auto')
+                .find('.title').blur();
+            this.mask.remove();
+        },
+
         events: {
 
             'focus .title': 'startEditing',
@@ -137,6 +140,10 @@
                     } else {
                         this.model.indent();
                     }
+                } else if (e.which === 27) {
+                    // ESC key to cancel editing.
+                    this.closeEditing();
+                    this.render();
                 }
             },
 
