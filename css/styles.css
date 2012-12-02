@@ -86,11 +86,7 @@ section > header {
     color: #333;
 }
 
-.task-list-item a:hover {
-    background-color: #333;
-    color: white;
-}
-
+.task-list-item a:hover,
 .task-list-item.selected a {
     background-color: #333;
     color: white;
