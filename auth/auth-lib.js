@@ -1,7 +1,12 @@
 ( function () {
 
     var goToAuthPage = function () {
-        window.location = chrome.extension.getURL('auth/authenticate.html');
+        window.location = 'https://accounts.google.com/o/oauth2/auth' +
+            '?response_type=token' +
+            '&client_id=' + CLIENT_ID +
+            '&redirect_uri=' + escape('https://www.google.com/robots.txt') +
+            '&scope=' + escape('https://www.googleapis.com/auth/tasks') +
+            '&state=glists-app-auth';
     };
 
     // Add the access_token to all requests made by backbone to the REST end
