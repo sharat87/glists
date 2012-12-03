@@ -202,6 +202,7 @@
         initialize: function () {
             this.tasksCollectionView = new TasksCollectionView();
             this.model.on('change:title', this.render, this);
+            this.model.on('destroy', this.remove, this);
         },
 
         render: function () {
