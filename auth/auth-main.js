@@ -21,6 +21,8 @@
         localStorage.auth = JSON.stringify(auth);
     }
 
-    window.location = chrome.extension.getURL('index.html');
+    chrome.extension.sendMessage(auth, function (response) {
+        window.close();
+    });
 
 }());
