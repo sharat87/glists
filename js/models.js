@@ -111,10 +111,30 @@
             }
         },
 
-        moveTo: function (index) {
-            var coll = this.collection;
+        moveTo: function (toIndex) {
+            var coll = this.collection,
+                fromIndex = coll.indexOf(this);
+
             coll.remove(this, {silent: true});
-            coll.add(this, {at: index});
+
+            var prevTask = coll.at(toIndex - 1),
+                prevIndent = prevTask.getIndentLevel(),
+                nextTask = coll.at(toIndex),
+                nextIndent = nextTask.getIndentLevel();
+
+            if (prevIndent < nextIndent) {
+                // Be a child of previous task.
+                this.position.set('parent', prevTask.get('id'));
+
+            } else {
+                // Be at the same level as the previous task.
+                this.position.set({
+                    parent: prevTask.position.get('parent')
+                });
+
+            }
+
+            coll.add(this, {at: toIndex});
             this.calculatePrevious();
         }
 
