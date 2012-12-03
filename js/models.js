@@ -118,19 +118,25 @@
             coll.remove(this, {silent: true});
 
             var prevTask = coll.at(toIndex - 1),
-                prevIndent = prevTask.getIndentLevel(),
+                prevIndent = prevTask && prevTask.getIndentLevel(),
                 nextTask = coll.at(toIndex),
-                nextIndent = nextTask.getIndentLevel();
+                nextIndent = nextTask && nextTask.getIndentLevel();
 
-            if (prevIndent < nextIndent) {
+            if (!prevTask) {
+                // No parent for the first task.
+                this.position.set('parent', null);
+
+            } else if (nextTask && prevIndent < nextIndent) {
                 // Be a child of previous task.
-                this.position.set('parent', prevTask.get('id'));
+                this.position.set(
+                    {parent: prevTask.get('id')},
+                    {silent: true});
 
             } else {
                 // Be at the same level as the previous task.
-                this.position.set({
-                    parent: prevTask.position.get('parent')
-                });
+                this.position.set(
+                    {parent: prevTask.position.get('parent')},
+                    {silent: true});
 
             }
 
