@@ -109,6 +109,13 @@
             if (i < 0) {
                 this.position.set('previous', null);
             }
+        },
+
+        moveTo: function (index) {
+            var coll = this.collection;
+            coll.remove(this, {silent: true});
+            coll.add(this, {at: index});
+            this.calculatePrevious();
         }
 
     });

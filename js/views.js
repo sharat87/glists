@@ -157,6 +157,11 @@
                 this.model.save({
                     status: e.target.checked ? 'completed' : 'needsAction'
                 });
+            },
+
+            'moved': function () {
+                this.model.moveTo(this.$el.index());
+                this.model.position.saveIfDirty();
             }
 
         }
@@ -172,6 +177,12 @@
             if (this.collection) {
                 this.setCollection(this.collection);
             }
+        },
+
+        render: function () {
+            CV.prototype.render.apply(this, arguments);
+            // this.$el.sortable({handle: 'drag-handle'});
+            return this;
         },
 
         setCollection: function (collection) {
@@ -278,6 +289,14 @@
         TaskListView.currentList.tasks.add(task, {at: 0});
         $('#tasks-container').prepend(view.render().el);
         view.startEditing();
+    });
+
+    // Make task items reorder-able by dragging their handles.
+    $('#tasks-container').sortable({
+        handle: '.drag-handle',
+        stop: function (e, ui) {
+            ui.item.trigger('moved');
+        }
     });
 
 })();
