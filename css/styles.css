@@ -137,6 +137,15 @@ section > header {
     background-color: #EEE;
 }
 
+#right-panel .task-item .del-btn {
+    float: right;
+    display: none;
+}
+
+#right-panel .task-item.editing .del-btn {
+    display: inline-block;
+}
+
 #right-panel .task-item .task-fields {
     display: none;
     position: absolute;

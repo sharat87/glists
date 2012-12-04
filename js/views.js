@@ -159,6 +159,11 @@
                 });
             },
 
+            'click .del-btn': function () {
+                this.closeEditing();
+                this.model.destroy();
+            },
+
             'moved': function () {
                 this.model.moveTo(this.$el.index());
                 this.model.position.saveIfDirty();
