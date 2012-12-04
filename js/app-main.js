@@ -15,6 +15,7 @@ authenticated(function (auth) {
                 taskListsCollection.get(localStorage.lastViewedList) ||
                 taskListsCollection.getListByTitle('Default List') ||
                 taskListsCollection.at(0));
+            document.body.removeChild(document.getElementById('loading-layer'));
         }
     });
 
