@@ -8,9 +8,14 @@ authenticated(function (auth) {
         }).render();
     });
 
+    taskListsCollection.on('selection-changed', function () {
+        localStorage.lastViewedList = this.getSelectedList().get('id');
+    });
+
     taskListsCollection.fetch({
         success: function () {
             taskListsCollection.setSelectedList(
+                taskListsCollection.get(localStorage.lastViewedList) ||
                 taskListsCollection.getListByTitle('Default List') ||
                 taskListsCollection.at(0));
         }

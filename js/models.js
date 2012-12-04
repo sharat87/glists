@@ -243,6 +243,7 @@
         },
 
         getListByTitle: function (title) {
+            if (!title) return null;
             var i = 0, len = this.length;
             while (i < len) {
                 var list = this.at(i++);
@@ -264,6 +265,8 @@
             this._selectedTaskList = taskList;
             taskList.isSelected = true;
             taskList.trigger('selected');
+
+            this.trigger('selection-changed');
         },
 
         getSelectedList: function () {
