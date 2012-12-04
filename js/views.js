@@ -60,6 +60,7 @@
             this.$el.css({
                 'margin-left': 1.5 * this.model.getIndentLevel() + 'em'
             });
+            return this;
         },
 
         doneEditing: function () {
@@ -67,14 +68,15 @@
                 newNotes = this.$('.notes').val(),
                 newDue = asAdate(this.$('.due-date').val()),
                 newStatus = (this.$('input:checkbox').is(':checked') ?
-                             'completed' : 'needsAction');
+                             'completed' : 'needsAction'),
+                old = this.model.toJSON();
 
             this.closeEditing();
 
-            if (newTitle !== this.model.get('title') ||
-                    newNotes !== this.model.get('notes') ||
+            if (newTitle !== old.title ||
+                    newNotes !== old.notes ||
                     !ADate.areEqual(newDue, this.model.get('due')) ||
-                    newStatus !== this.model.get('status')) {
+                    newStatus !== old.status) {
                 this.model.save({
                     title: newTitle,
                     status: newStatus,
@@ -84,6 +86,7 @@
             }
 
             this.model.position.saveIfDirty();
+            return this;
         },
 
         startEditing: function () {
@@ -109,15 +112,15 @@
                 }).appendTo(document.body);
 
             this.$('.title').focus();
+            return this;
 
         },
 
         closeEditing: function () {
-            this.$el
-                .removeClass('editing')
-                .css('z-index', 'auto')
-                .find('.title').blur();
+            this.$el.removeClass('editing').css('z-index', '');
+            this.$('.title').blur();
             this.mask.remove();
+            return this;
         },
 
         events: {
@@ -135,15 +138,10 @@
                 // Tab key for indentation changes.
                 if (e.which === 9) {
                     e.preventDefault();
-                    if (e.shiftKey) {
-                        this.model.dedent();
-                    } else {
-                        this.model.indent();
-                    }
+                    this.model[e.shiftKey ? 'dedent' : 'indent']();
                 } else if (e.which === 27) {
                     // ESC key to cancel editing.
-                    this.closeEditing();
-                    this.render();
+                    this.closeEditing().render();
                 }
             },
 
@@ -160,8 +158,7 @@
             },
 
             'click .del-btn': function () {
-                this.closeEditing();
-                this.model.destroy();
+                this.closeEditing().model.destroy();
             },
 
             'moved': function () {
