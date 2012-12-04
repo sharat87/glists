@@ -124,29 +124,29 @@ section > header {
     -webkit-transform: translatey(1px);
 }
 
-#right-panel .task-item {
+.task-item {
     padding: 6px 12px;
     position: relative;
 }
 
-#right-panel .task-item.completed {
+.task-item.completed {
     color: #CCC;
 }
 
-#right-panel .task-item.editing {
+.task-item.editing {
     background-color: #EEE;
 }
 
-#right-panel .task-item .del-btn {
+.task-item .del-btn {
     float: right;
     display: none;
 }
 
-#right-panel .task-item.editing .del-btn {
+.task-item.editing .del-btn {
     display: inline-block;
 }
 
-#right-panel .task-item .task-fields {
+.task-item .task-fields {
     display: none;
     position: absolute;
     width: 420px;
@@ -160,7 +160,7 @@ section > header {
     margin-top: -1px;
 }
 
-#right-panel .task-item .notes {
+.task-item .notes {
     font-family: Oxygen, sans-serif;
     font-size: .9em;
     width: 100%;
@@ -171,30 +171,30 @@ section > header {
     box-sizing: border-box;
 }
 
-#right-panel .task-item .due-date {
+.task-item .due-date {
     margin-left: 18px;
 }
 
-#right-panel .task-item.editing .task-fields {
+.task-item.editing .task-fields {
     display: block;
 }
 
-#right-panel .task-item input {
+.task-item input {
     margin-right: 6px;
     -webkit-transform: scale(1.2);
 }
 
-#right-panel .task-item .title {
+.task-item .title {
     display: inline-block;
     min-width: 40px;
     height: 100%;
 }
 
-#right-panel .task-item .title:focus {
+.task-item .title:focus {
     outline: none;
 }
 
-#right-panel #new-task-form {
+#new-task-form {
     clear: both;
     margin-top: 12px;
 }
