@@ -19,16 +19,16 @@ authenticated(function (auth) {
         }
     });
 
-    var newTaskListForm = $('#new-task-list-form'),
-        newListTitle = newTaskListForm.find('input[name=title]');
-    newTaskListForm.on('submit', function (e) {
+    var newTaskListForm = document.getElementById('new-task-list-form'),
+        newListTitle = newTaskListForm.title;
+    newTaskListForm.addEventListener('submit', function (e) {
         e.preventDefault();
         var newList = new TaskList({
-            title: newListTitle.val()
+            title: newListTitle.value
         });
         taskListsCollection.add(newList);
         newList.save();
-        newListTitle.val('');
+        newListTitle.value = '';
     });
 
 });

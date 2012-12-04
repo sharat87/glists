@@ -1,7 +1,16 @@
 (function () {
 
+    var tasksContainer = document.getElementById('tasks-container');
+
     // Being lazy.
-    var V = Backbone.View;
+    var V = Backbone.View.extend({
+        qs: function (selector) {
+            return this.el.querySelector(selector);
+        },
+        qsa: function (selector) {
+            return this.el.querySelectorAll(selector);
+        }
+    });
 
     // A View class similar to `Backbone.View`, intended to be used with
     // Collections.
@@ -9,16 +18,23 @@
         // Render every item in `this.collection` and add it to this view's
         // `el`. Uses the `this.modelView` class to render each item.
         render: function () {
-            this.$el.empty().append(this.collection.map(function (model) {
-                return new this.modelView({model: model}).render().$el;
-            }, this));
+            var modelsFragment = document.createDocumentFragment();
+
+            this.collection.each(function (model) {
+                modelsFragment.appendChild(
+                    new this.modelView({model: model}).render().el);
+            }, this);
+
+            this.el.innerHTML = '';
+            this.el.appendChild(modelsFragment);
+
             return this;
         }
     });
 
     // A helper function to create template renderer functions.
     var mktemplate = function (elem) {
-        var templateString = $(elem).html();
+        var templateString = document.getElementById(elem).innerHTML;
         return function (data) {
             return Mustache.render(templateString, data);
         };
@@ -28,7 +44,7 @@
         tagName: 'div',
         className: 'task-item',
 
-        template: mktemplate('#task-item-template'),
+        template: mktemplate('task-item-template'),
 
         initialize: function () {
             this.model.position.on('change:parent', this.updateIndent, this);
@@ -43,13 +59,10 @@
             var due = this.model.get('due');
             templateData.dueStr = due ? due.toString() : '';
 
-            this.$el.html(this.template(templateData));
+            this.el.innerHTML = this.template(templateData);
 
-            if (templateData.checked) {
-                this.$el.addClass('completed');
-            } else {
-                this.$el.removeClass('completed');
-            }
+            this.el.classList[templateData.checked ?
+                'add' : 'remove']('completed');
 
             this.updateIndent();
 
@@ -57,17 +70,16 @@
         },
 
         updateIndent: function () {
-            this.$el.css({
-                'margin-left': 1.5 * this.model.getIndentLevel() + 'em'
-            });
+            this.el.style.marginLeft =
+                1.5 * this.model.getIndentLevel() + 'em';
             return this;
         },
 
         doneEditing: function () {
-            var newTitle = this.$('.title').text(),
-                newNotes = this.$('.notes').val(),
-                newDue = asAdate(this.$('.due-date').val()),
-                newStatus = (this.$('input:checkbox').is(':checked') ?
+            var newTitle = this.qs('.title').innerText,
+                newNotes = this.qs('.notes').value,
+                newDue = asAdate(this.qs('.due-date').value),
+                newStatus = (this.qs('input[type=checkbox]').checked ?
                              'completed' : 'needsAction'),
                 old = this.model.toJSON();
 
@@ -92,11 +104,12 @@
         startEditing: function () {
             var self = this;
 
-            if (this.$el.hasClass('editing')) {
+            if (this.el.classList.contains('editing')) {
                 return;
             }
 
-            this.$el.addClass('editing').css('z-index', 30);
+            this.el.classList.add('editing');
+            this.el.style.zIndex = 30;
 
             this.mask = $('<div/>', {
                     click: _.bind(this.doneEditing, this),
@@ -111,14 +124,15 @@
                     }
                 }).appendTo(document.body);
 
-            this.$('.title').focus();
+            this.qs('.title').focus();
             return this;
 
         },
 
         closeEditing: function () {
-            this.$el.removeClass('editing').css('z-index', '');
-            this.$('.title').blur();
+            this.el.classList.remove('editing');
+            this.el.style.zIndex = '';
+            this.qs('.title').blur();
             this.mask.remove();
             return this;
         },
@@ -172,7 +186,7 @@
 
     var TasksCollectionView = window.TasksCollectionView = CV.extend({
 
-        el: '#tasks-container',
+        el: tasksContainer,
         modelView: TaskView,
 
         initialize: function () {
@@ -183,7 +197,6 @@
 
         render: function () {
             CV.prototype.render.apply(this, arguments);
-            // this.$el.sortable({handle: 'drag-handle'});
             return this;
         },
 
@@ -199,7 +212,7 @@
         tagName: 'li',
         className: 'task-list-item',
 
-        template: mktemplate('#list-item-template'),
+        template: mktemplate('list-item-template'),
 
         initialize: function () {
             this.tasksCollectionView = new TasksCollectionView();
@@ -210,17 +223,14 @@
         },
 
         render: function () {
-            this.$el.html(this.template(this.model.toJSON()));
-            if (this.model.isSelected) {
-                this.$el.addClass('selected');
-            } else {
-                this.$el.removeClass('selected');
-            }
+            this.el.innerHTML = this.template(this.model.toJSON());
+            this.el.classList[this.model.isSelected ?
+                'add' : 'remove']('selected');
             return this;
         },
 
         select: function () {
-            $('#tasks-container').html('Loading...');
+            tasksContainer.innerHTML = 'Loading...';
 
             TaskListView.currentList = this.model;
 
@@ -277,32 +287,33 @@
     });
 
     // New task form handler.
-    var newTaskForm = $('#new-task-form'),
-        newTaskTitle = newTaskForm.find('input[name=title]');
+    var newTaskForm = document.getElementById('new-task-form'),
+        newTaskTitle = newTaskForm.title;
 
-    newTaskForm.on('submit', function (e) {
+    newTaskForm.addEventListener('submit', function (e) {
         e.preventDefault();
         var newTask = new TaskItem({
-            title: newTaskTitle.val()
+            title: newTaskTitle.value
         });
         TaskListView.currentList.tasks.add(newTask);
         newTask.save();
-        newTaskTitle.val('');
+        newTaskTitle.value = '';
     });
 
     // New task toolbar button.
-    var addTaskButton = $('#add-task-btn');
+    var addTaskButton = document.getElementById('add-task-btn');
 
-    addTaskButton.click(function () {
+    addTaskButton.addEventListener('click', function () {
         var task = new TaskItem(),
             view = new TaskView({model: task});
         TaskListView.currentList.tasks.add(task, {at: 0});
-        $('#tasks-container').prepend(view.render().el);
+        tasksContainer
+            .insertBefore(view.render().el, tasksContainer.firstChild);
         view.startEditing();
     });
 
     // Make task items reorder-able by dragging their handles.
-    $('#tasks-container').sortable({
+    $(tasksContainer).sortable({
         handle: '.drag-handle',
         stop: function (e, ui) {
             ui.item.trigger('moved');
