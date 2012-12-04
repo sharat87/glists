@@ -43,7 +43,8 @@
         }
     };
 
-    var authUrl = 'https://accounts.google.com/o/oauth2/auth' +
+    var authCallback = null,
+        authUrl = 'https://accounts.google.com/o/oauth2/auth' +
         '?response_type=token' +
         '&client_id=' + CLIENT_ID +
         '&redirect_uri=' + escape('https://www.google.com/robots.txt') +
@@ -56,9 +57,11 @@
     };
 
     // Recieve message from the authentication popup.
-    var authCallback = null;
     chrome.extension.onMessage.addListener(function (auth) {
-        if (authCallback) authCallback(auth);
+        if (authCallback) {
+            authCallback(auth);
+            authCallback = null;
+        }
     });
 
     // Get a new token, intelligently.
