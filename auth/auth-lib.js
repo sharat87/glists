@@ -12,6 +12,9 @@
                 dataType: 'json',
                 success: function (response) {
                     if (response.audience === CLIENT_ID) {
+                        auth.verified = true;
+                        auth.expires_in = response.expires_in;
+                        localStorage.auth = JSON.stringify(auth);
                         inject_backbone(auth);
                         callback(auth);
                     }
@@ -46,9 +49,9 @@
     // Recieve message from the authentication popup.
     var authCallback = null;
     chrome.extension.onMessage.addListener(
-        function (request, sender, sendResponse) {
+        function (auth, sender, sendResponse) {
             sendResponse('');
-            if (authCallback) authCallback(request);
+            if (authCallback) authCallback(auth);
         });
 
     // Add the access_token to all requests made by backbone to the REST end

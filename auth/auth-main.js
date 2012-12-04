@@ -18,7 +18,6 @@
         alert('Authentication error: ' + auth.error);
     } else {
         auth.verified = false;
-        localStorage.auth = JSON.stringify(auth);
     }
 
     chrome.extension.sendMessage(auth, function (response) {
