@@ -11,48 +11,88 @@
                 },
                 dataType: 'json',
                 success: function (response) {
-                    if (response.audience === CLIENT_ID) {
-                        auth.verified = true;
-                        auth.expires_in = response.expires_in;
-                        localStorage.auth = JSON.stringify(auth);
-                        inject_backbone(auth);
-                        callback(auth);
+                    if (response.audience !== CLIENT_ID) {
+                        // Something went horribly wrong.
+                        getNewToken(verifyToken);
+                        return;
                     }
+
+                    auth.verified = true;
+                    auth.expires_in = response.expires_in;
+                    localStorage.auth = JSON.stringify(auth);
+
+                    setTimeout(function () {
+                        getNewToken(verifyToken);
+                    }, Math.max(0, auth.expires_in - 60) * 1000);
+
+                    inject_backbone(auth);
+                    callback(auth);
                 },
                 error: function () {
                     localStorage.removeItem('auth');
-                    openAuthPage(verifyToken);
+                    getNewToken(verifyToken);
                 }
             });
         };
 
         if (typeof localStorage.auth === 'undefined' ||
                 (auth = JSON.parse(localStorage.auth)) === null) {
-            openAuthPage(verifyToken);
+            getNewToken(verifyToken);
         } else {
             verifyToken(auth);
         }
     };
 
+    var authUrl = 'https://accounts.google.com/o/oauth2/auth' +
+        '?response_type=token' +
+        '&client_id=' + CLIENT_ID +
+        '&redirect_uri=' + escape('https://www.google.com/robots.txt') +
+        '&scope=' + escape('https://www.googleapis.com/auth/tasks') +
+        '&state=glists-app-auth';
+
     // Open a popup window with the google authentication url.
-    var openAuthPage = function (callback) {
-        authCallback = callback;
-        var url = 'https://accounts.google.com/o/oauth2/auth' +
-            '?response_type=token' +
-            '&client_id=' + CLIENT_ID +
-            '&redirect_uri=' + escape('https://www.google.com/robots.txt') +
-            '&scope=' + escape('https://www.googleapis.com/auth/tasks') +
-            '&state=glists-app-auth';
-        window.open(url, 'Authentication for Glists', 'toolbar=no');
+    var openAuthPopup = function () {
+        window.open(authUrl, 'Authenticating Glists', 'toolbar=no');
     };
 
     // Recieve message from the authentication popup.
     var authCallback = null;
-    chrome.extension.onMessage.addListener(
-        function (auth, sender, sendResponse) {
-            sendResponse('');
-            if (authCallback) authCallback(auth);
+    chrome.extension.onMessage.addListener(function (auth) {
+        if (authCallback) authCallback(auth);
+    });
+
+    // Get a new token, intelligently.
+    var getNewToken = function (callback) {
+        authCallback = callback;
+
+        // This ajax call dictates if we should get the token via an iframe or
+        // a popup window.
+        $.ajax({
+            url: authUrl,
+
+            success: function (response, status, xhr) {
+                if (response.substr(0, 14).toLowerCase() === '<!doctype html') {
+                    // Open a popup to show the html reply.
+                    openAuthPopup(callback);
+
+                } else {
+                    // Get the token with a hidden iframe.
+                    var iframe = document.createElement('iframe');
+                    document.body.appendChild(iframe);
+                    iframe.style.display = 'none';
+                    iframe.src = authUrl;
+
+                }
+            },
+
+            error: function () {
+                // Get the token by asking the user for one.
+                openAuthPopup(callback);
+            }
+
         });
+
+    };
 
     // Add the access_token to all requests made by backbone to the REST end
     // point.

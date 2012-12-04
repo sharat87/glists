@@ -10,6 +10,7 @@
     "content_scripts": [{
         "matches": ["https://www.google.com/robots.txt"],
         "js": ["auth/oauth_inject.js"],
+        "all_frames": true,
         "run_at": "document_start"
     }],
     "permissions": ["https://accounts.google.com/o/oauth2/token"],
