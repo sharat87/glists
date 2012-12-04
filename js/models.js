@@ -225,13 +225,49 @@
     var TaskListsCollection = window.TaskListsCollection = C.extend({
         model: TaskList,
         url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
+
         initialize: function () {
             this.on('change', function () {
                 this.sort();
             }, this);
+
+            this.on('reset', function () {
+                if (this._selectedTaskList) {
+                    this.setSelectedList(this._selectedTaskList);
+                }
+            });
         },
+
         comparator: function (taskList) {
             return taskList.get('title').toLowerCase();
+        },
+
+        getListByTitle: function (title) {
+            var i = 0, len = this.length;
+            while (i < len) {
+                var list = this.at(i++);
+                if (list.get('title') === title) {
+                    return list;
+                }
+            }
+            return null;
+        },
+
+        setSelectedList: function (taskList) {
+            if (!taskList) return;
+
+            if (this._selectedTaskList) {
+                this._selectedTaskList.isSelected = false;
+                this._selectedTaskList.trigger('deselected');
+            }
+
+            this._selectedTaskList = taskList;
+            taskList.isSelected = true;
+            taskList.trigger('selected');
+        },
+
+        getSelectedList: function () {
+            return this._selectedTaskList;
         }
     });
 

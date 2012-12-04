@@ -201,35 +201,42 @@
 
         initialize: function () {
             this.tasksCollectionView = new TasksCollectionView();
-            this.model.on('change:title', this.render, this);
+            this.model.on('selected', this.select, this);
             this.model.on('destroy', this.remove, this);
+            this.model.on('change:title selected deselected',
+                          this.render, this);
         },
 
         render: function () {
             this.$el.html(this.template(this.model.toJSON()));
+            if (this.model.isSelected) {
+                this.$el.addClass('selected');
+            } else {
+                this.$el.removeClass('selected');
+            }
             return this;
+        },
+
+        select: function () {
+            $('#tasks-container').html('Loading...');
+
+            TaskListView.currentList = this.model;
+
+            var tasksCollectionView = this.tasksCollectionView;
+            this.model.tasks.fetch({
+                success: function (collection, response) {
+                    tasksCollectionView
+                    .setCollection(collection)
+                    .render();
+                }
+            });
         },
 
         events: {
 
             'click a': function (e) {
                 e.preventDefault();
-
-                this.$el.addClass('selected')
-                    .siblings().removeClass('selected');
-
-                $('#tasks-container').html('Loading...');
-
-                TaskListView.currentList = this.model;
-
-                var tasksCollectionView = this.tasksCollectionView;
-                this.model.tasks.fetch({
-                    success: function (collection, response) {
-                        tasksCollectionView
-                            .setCollection(collection)
-                            .render();
-                    }
-                });
+                this.model.collection.setSelectedList(this.model);
             },
 
             'click .del-btn': function (e) {

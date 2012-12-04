@@ -8,7 +8,13 @@ authenticated(function (auth) {
         }).render();
     });
 
-    taskListsCollection.fetch();
+    taskListsCollection.fetch({
+        success: function () {
+            taskListsCollection.setSelectedList(
+                taskListsCollection.getListByTitle('Default List') ||
+                taskListsCollection.at(0));
+        }
+    });
 
     var newTaskListForm = $('#new-task-list-form'),
         newListTitle = newTaskListForm.find('input[name=title]');
