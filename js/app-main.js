@@ -2,18 +2,15 @@ authenticated(function (auth) {
 
     var taskListsCollection = new TaskListsCollection();
 
-    taskListsCollection.on('reset', function () {
-        new TaskListsCollectionView({
-            collection: this
-        }).render();
-    });
-
     taskListsCollection.on('selection-changed', function () {
         localStorage.lastViewedList = this.getSelectedList().get('id');
     });
 
     taskListsCollection.fetch({
         success: function () {
+            new TaskListsCollectionView({
+                collection: taskListsCollection
+            }).render();
             taskListsCollection.setSelectedList(
                 taskListsCollection.get(localStorage.lastViewedList) ||
                 taskListsCollection.getListByTitle('Default List') ||

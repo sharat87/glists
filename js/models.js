@@ -207,7 +207,11 @@
         }
     });
 
+    var _nextCid = 1;
     var _TasksCollection = C.extend({
+        initialize: function () {
+            this.ccid = _nextCid++;
+        },
         model: TaskItem
     });
 
@@ -227,7 +231,7 @@
         url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
 
         initialize: function () {
-            this.on('change', function () {
+            this.on('change', function (taskList) {
                 this.sort();
             }, this);
 

@@ -226,8 +226,8 @@
             this.model.tasks.fetch({
                 success: function (collection, response) {
                     tasksCollectionView
-                    .setCollection(collection)
-                    .render();
+                        .setCollection(collection)
+                        .render();
                 }
             });
         },
