@@ -224,9 +224,10 @@
         template: mktemplate('list-item-template'),
 
         initialize: function () {
-            this.model.on('selected', this.select, this);
             this.model.on('change:title selected deselected',
                         this.render, this);
+            this.model.on('selected cleared', this.load, this);
+            this.model.on('pre-clear', this.setLoading, this);
             this.tasksCollectionView = new TasksCollectionView({
                 collection: this.model.tasks
             });
@@ -239,10 +240,15 @@
             return this;
         },
 
-        select: function () {
-            this.tasksCollectionView.el.innerHTML = 'Loading...';
+        load: function () {
             TaskListView.currentList = this.model;
+            this.setLoading();
             this.model.tasks.fetch();
+            return this;
+        },
+
+        setLoading: function () {
+            this.tasksCollectionView.el.innerHTML = 'Loading...';
         },
 
         events: {
@@ -319,6 +325,12 @@
         stop: function (e, ui) {
             ui.item.trigger('moved');
         }
+    });
+
+    // Clear completed button.
+    var clearBtn = document.getElementById('clear-btn');
+    clearBtn.addEventListener('click', function () {
+        TaskListView.currentList.clear();
     });
 
 })();

@@ -35,6 +35,10 @@ section > header {
     padding: 0 12px;
 }
 
+section > header .right {
+    float: right;
+}
+
 #list-panel {
     width: 300px;
     border-right: thin solid #333;

@@ -212,14 +212,41 @@
     });
 
     var TaskList = window.TaskList = M.extend({
+
         initialize: function () {
             this.tasks = new _TasksCollection();
             this.tasks.url = _.bind(this.tasksUrl, this);
         },
-        tasksUrl: function () {
+
+        listUrl: function () {
             return 'https://www.googleapis.com/tasks/v1/lists/' +
-                this.get('id') + '/tasks';
+                this.get('id');
+        },
+
+        tasksUrl: function () {
+            return this.listUrl() + '/tasks';
+        },
+
+        clear: function (options) {
+            options = options || {};
+            var success = options.success, model = this;
+            options.success = function () {
+                model.trigger('cleared');
+                if (success) success.apply(this, arguments);
+            };
+            this.sync('clear', this, options);
+        },
+
+        sync: function (method, model, options) {
+            if (method === 'clear') {
+                this.trigger('pre-clear');
+                options = options || {};
+                options.url = this.listUrl() + '/clear';
+                method = 'create';
+            }
+            return Backbone.sync.call(this, method, model, options);
         }
+
     });
 
     var TaskListsCollection = window.TaskListsCollection = C.extend({
