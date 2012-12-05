@@ -12,6 +12,20 @@
         }
     });
 
+    // Instead of initializing Views directly, this class-method should be used,
+    // to avoid creating multiple views on the same model.
+    V.forModel = function (model) {
+        if (!this.views) {
+            this.views = {};
+        } else if (this.views[model.cid]) {
+            return this.views[model.cid];
+        }
+
+        var view = this.views[model.cid] = new this({model: model});
+        model.on('destroy', view.remove, view);
+        return view;
+    };
+
     // A View class similar to `Backbone.View`, intended to be used with
     // Collections.
     var CV = V.extend({
@@ -22,7 +36,7 @@
 
             this.collection.each(function (model) {
                 modelsFragment.appendChild(
-                    new this.modelView({model: model}).render().el);
+                    this.modelView.forModel(model).render().el);
             }, this);
 
             this.el.innerHTML = '';
@@ -48,7 +62,7 @@
 
         initialize: function () {
             this.model.position.on('change:parent', this.updateIndent, this);
-            this.model.on('destroy', this.remove, this);
+            this.model.on('change', this.render, this);
         },
 
         render: function () {
@@ -190,20 +204,7 @@
         modelView: TaskView,
 
         initialize: function () {
-            if (this.collection) {
-                this.setCollection(this.collection);
-            }
-        },
-
-        render: function () {
-            CV.prototype.render.apply(this, arguments);
-            return this;
-        },
-
-        setCollection: function (collection) {
-            this.collection = collection;
-            this.collection.on('reset sync', this.render, this);
-            return this;
+            this.collection.on('reset', this.render, this);
         }
 
     });
@@ -215,11 +216,12 @@
         template: mktemplate('list-item-template'),
 
         initialize: function () {
-            this.tasksCollectionView = new TasksCollectionView();
             this.model.on('selected', this.select, this);
-            this.model.on('destroy', this.remove, this);
             this.model.on('change:title selected deselected',
-                          this.render, this);
+                        this.render, this);
+            this.tasksCollectionView = new TasksCollectionView({
+                collection: this.model.tasks
+            });
         },
 
         render: function () {
@@ -230,18 +232,9 @@
         },
 
         select: function () {
-            tasksContainer.innerHTML = 'Loading...';
-
+            this.tasksCollectionView.el.innerHTML = 'Loading...';
             TaskListView.currentList = this.model;
-
-            var tasksCollectionView = this.tasksCollectionView;
-            this.model.tasks.fetch({
-                success: function (collection, response) {
-                    tasksCollectionView
-                        .setCollection(collection)
-                        .render();
-                }
-            });
+            this.model.tasks.fetch();
         },
 
         events: {

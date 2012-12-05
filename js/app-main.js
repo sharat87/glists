@@ -2,7 +2,7 @@ authenticated(function (auth) {
 
     var taskListsCollection = new TaskListsCollection();
 
-    taskListsCollection.on('selection-changed', function () {
+    taskListsCollection.on('selected', function () {
         localStorage.lastViewedList = this.getSelectedList().get('id');
     });
 

@@ -207,11 +207,7 @@
         }
     });
 
-    var _nextCid = 1;
     var _TasksCollection = C.extend({
-        initialize: function () {
-            this.ccid = _nextCid++;
-        },
         model: TaskItem
     });
 
@@ -234,12 +230,6 @@
             this.on('change', function (taskList) {
                 this.sort();
             }, this);
-
-            this.on('reset', function () {
-                if (this._selectedTaskList) {
-                    this.setSelectedList(this._selectedTaskList);
-                }
-            });
         },
 
         comparator: function (taskList) {
@@ -269,8 +259,6 @@
             this._selectedTaskList = taskList;
             taskList.isSelected = true;
             taskList.trigger('selected');
-
-            this.trigger('selection-changed');
         },
 
         getSelectedList: function () {
