@@ -25,7 +25,7 @@
                         getNewToken(verifyToken);
                     }, Math.max(0, auth.expires_in - 60) * 1000);
 
-                    inject_backbone(auth);
+                    injectBackbone(auth);
                     callback(auth);
                 },
                 error: function () {
@@ -51,11 +51,6 @@
         '&scope=' + escape('https://www.googleapis.com/auth/tasks') +
         '&state=glists-app-auth';
 
-    // Open a popup window with the google authentication url.
-    var openAuthPopup = function () {
-        window.open(authUrl, 'Authenticating Glists', 'toolbar=no');
-    };
-
     // Recieve message from the authentication popup.
     chrome.extension.onMessage.addListener(function (auth) {
         if (authCallback) {
@@ -66,53 +61,50 @@
 
     // Get a new token, intelligently.
     var getNewToken = function (callback) {
-        authCallback = callback;
+        var tokenRecieved = false,
+            startTime = new Date().valueOf();
 
-        // This ajax call dictates if we should get the token via an iframe or
-        // a popup window.
-        $.ajax({
-            url: authUrl,
+        // This will be called if we get the token from the iframe.
+        authCallback = function (auth) {
+            tokenRecieved = true;
+            console.info('Getting token via iframe took',
+                         new Date().valueOf() - startTime, 'seconds.');
+            callback(auth);
+        };
 
-            success: function (response, status, xhr) {
-                if (response.substr(0, 14).toLowerCase() === '<!doctype html') {
-                    // Open a popup to show the html reply.
-                    openAuthPopup(callback);
+        // Try to get the token with a hidden iframe.
+        var iframe = document.createElement('iframe');
+        document.body.appendChild(iframe);
+        iframe.style.display = 'none';
+        iframe.src = authUrl;
 
-                } else {
-                    // Get the token with a hidden iframe.
-                    var iframe = document.createElement('iframe');
-                    document.body.appendChild(iframe);
-                    iframe.style.display = 'none';
-                    iframe.src = authUrl;
-
-                }
-            },
-
-            error: function () {
-                // Get the token by asking the user for one.
-                openAuthPopup(callback);
+        // We wait for the iframe to get us the token, but only until 3seconds.
+        // After that, abort the iframe and open up a proper oauth popup.
+        setTimeout(function () {
+            if (!tokenRecieved) {
+                authCallback = callback;
+                window.open(authUrl, 'Authenticating Glists', 'toolbar=no');
             }
-
-        });
+            iframe.parentNode.removeChild(iframe);
+        }, 3000);
 
     };
 
     // Add the access_token to all requests made by backbone to the REST end
     // point.
-    var inject_backbone = function (auth) {
+    var injectBackbone = function (auth) {
 
-        if (typeof Backbone === 'undefined') {
-            return;
-        }
+        if (typeof Backbone === 'undefined') return;
 
-        var original_sync = Backbone.sync;
+        var originalSync = Backbone.sync;
 
         Backbone.sync = function (method, model, options) {
-            (options || (options = {})).beforeSend = function (xhr) {
+            options = options || {};
+            options.beforeSend = function (xhr) {
                 xhr.setRequestHeader('Authorization',
                                      'Bearer ' + auth.access_token);
             };
-            return original_sync.call(this, method, model, options);
+            return originalSync.call(this, method, model, options);
         };
 
     };
