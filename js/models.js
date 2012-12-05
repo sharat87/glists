@@ -183,7 +183,6 @@
         },
 
         sync: function (method, model, options) {
-            options.data = ' ';
             options.url = this.task.url() + '/move';
 
             var qs = [],
