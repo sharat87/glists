@@ -1,4 +1,4 @@
-( function () {
+(function () {
 
     // Call the given function, with authentication stuff handled.
     window.authenticated = function (callback) {
@@ -109,4 +109,4 @@
 
     };
 
-})();
+}());
