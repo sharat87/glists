@@ -63,6 +63,10 @@
         initialize: function () {
             this.model.position.on('change:parent', this.updateIndent, this);
             this.model.on('change', this.render, this);
+            this.model.on('destroy', function () {
+                this.mask.remove();
+                this.remove();
+            }, this);
         },
 
         render: function () {
@@ -169,7 +173,11 @@
                     this.model[e.shiftKey ? 'dedent' : 'indent']();
                 } else if (e.which === 27) {
                     // ESC key to cancel editing.
-                    this.closeEditing().render();
+                    if (this.model.isNew()) {
+                        this.model.destroy();
+                    } else {
+                        this.closeEditing().render();
+                    }
                 }
             },
 
