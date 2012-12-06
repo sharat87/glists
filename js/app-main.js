@@ -34,11 +34,18 @@ authenticated(function (auth) {
     // Activate the social buttons.
     setTimeout(function () {
 
+        var addScript = function (url) {
+            var po = document.createElement('script');
+            po.async = true;
+            po.src = url;
+            document.body.appendChild(po);
+        };
+
         // Twitter button.
-        var js = document.createElement('script');
-        js.id = 'twitter-wjs';
-        js.src = 'https://platform.twitter.com/widgets.js';
-        document.body.appendChild(js);
+        addScript('https://platform.twitter.com/widgets.js');
+
+        // Google +1 button.
+        addScript('https://apis.google.com/js/plusone.js');
 
     }, 10);
 
