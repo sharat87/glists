@@ -42,6 +42,8 @@ authenticated(function (auth) {
         };
 
         // Twitter button.
+        document.getElementById('twitter-ln').dataset.url =
+            document.querySelector('link[rel=canonical]').href;
         addScript('https://platform.twitter.com/widgets.js');
 
         // Google +1 button.
