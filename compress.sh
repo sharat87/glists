@@ -29,7 +29,9 @@ main () {
         js \
         auth/auth-lib.js \
         closure-compiler \
-        meta/logo/icon.svg
+        meta/logo/icon.svg \
+        meta/screenshots \
+        meta/promotional
 
     # Update the app name in manifest (remove dev suffix).
     update-manifest

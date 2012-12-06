@@ -1,6 +1,6 @@
 {
     "name": "Glists Dev",
-    "version": "0.2",
+    "version": "0.2.1",
     "description": "An annoyingly simple checklists app, using on Google tasks",
     "app": {
         "launch": {
