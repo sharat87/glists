@@ -294,20 +294,6 @@
         }
     });
 
-    // New task form handler.
-    var newTaskForm = byId('new-task-form'),
-        newTaskTitle = newTaskForm.title;
-
-    newTaskForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var newTask = new TaskItem({
-            title: newTaskTitle.value
-        });
-        TaskListView.currentList.tasks.add(newTask);
-        newTask.save();
-        newTaskTitle.value = '';
-    });
-
     // New task toolbar button.
     var addTaskButton = byId('add-task-btn');
 
