@@ -13,6 +13,9 @@ main () {
         app.js
     mv app-min.js app.js
 
+    # Use the minified version of vendor libs, where applicable.
+    mv vendor/backbone-min.js vendor/backbone.js
+
     # Remove the dev scripts and activate the publish script. Also remove/change
     # other dev to pub stuff.
     publish index.html
@@ -24,7 +27,9 @@ main () {
         spec-runner.html \
         vendor/jasmine-1.2.0 \
         js \
-        auth/auth-lib.js
+        auth/auth-lib.js \
+        closure-compiler \
+        meta/logo/icon.svg
 
     # Update the app name in manifest (remove dev suffix).
     update-manifest

@@ -1,7 +1,10 @@
 .PHONY: package logos
 
 package:
-	apack app.zip *
+	rm -f app.zip; \
+	./compress.sh; \
+	cd build; \
+	apack ../app.zip *
 
 logos: meta/logo/icon-16.png meta/logo/icon-48.png meta/logo/icon-128.png
 
