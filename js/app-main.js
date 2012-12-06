@@ -31,4 +31,15 @@ authenticated(function (auth) {
         newListTitle.value = '';
     });
 
+    // Activate the social buttons.
+    setTimeout(function () {
+
+        // Twitter button.
+        var js = document.createElement('script');
+        js.id = 'twitter-wjs';
+        js.src = 'https://platform.twitter.com/widgets.js';
+        document.body.appendChild(js);
+
+    }, 10);
+
 });

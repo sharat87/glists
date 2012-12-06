@@ -14,6 +14,8 @@
         "run_at": "document_start"
     }],
     "permissions": ["https://accounts.google.com/o/oauth2/token"],
+    "content_security_policy":
+        "script-src 'self' https://platform.twitter.com; object-src 'self'",
     "icons": {
         "16": "assets/icon-16.png",
         "48": "assets/icon-48.png",
