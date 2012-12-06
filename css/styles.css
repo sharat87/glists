@@ -26,7 +26,7 @@ html, body, div {
     box-sizing: border-box;
 }
 
-section > header {
+header {
     background-color: #333;
     font-family: Gentium;
     color: #CCC;
@@ -35,8 +35,29 @@ section > header {
     padding: 0 12px;
 }
 
-section > header .right {
+header .right {
     float: right;
+}
+
+header button {
+    color: #CCC;
+    text-decoration: none;
+    padding: 3px 6px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-family: Gentium, serif;
+    font-size: 1.1em;
+}
+
+header button:hover {
+    color: #333;
+    background-color: #CCC;
+}
+
+header button:active {
+    -webkit-transform: translatey(1px);
 }
 
 #list-panel {
@@ -53,6 +74,7 @@ section > header .right {
 
 #list-panel header h1 {
     margin: 0;
+    display: inline-block;
 }
 
 #list-panel ul {
@@ -105,27 +127,6 @@ section > header .right {
     overflow: auto;
     width: 100%;
     padding-bottom: 48px;
-}
-
-#right-panel header button {
-    color: #CCC;
-    text-decoration: none;
-    padding: 3px 6px;
-    border-radius: 2px;
-    cursor: pointer;
-    border: none;
-    background-color: transparent;
-    font-family: Gentium, serif;
-    font-size: 1.1em;
-}
-
-#right-panel header button:hover {
-    color: #333;
-    background-color: #CCC;
-}
-
-#right-panel header button:active {
-    -webkit-transform: translatey(1px);
 }
 
 .task-item {
@@ -206,6 +207,35 @@ section > header .right {
 .task-item .drag-handle {
     cursor: move;
     opacity: .7;
+}
+
+.popup-mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    text-align: center;
+    display: none;
+}
+
+.popup-mask.show {
+    display: block;
+}
+
+.popup-mask > * {
+    margin-top: 48px;
+    background-color: white;
+    box-shadow: 0 0 100px rgba(0, 0, 0, .7);
+    border-radius: 3px;
+    display: inline-block;
+    width: 40%;
+}
+
+#about-popup > * {
+    text-align: left;
+    padding: 12px 24px;
 }
 
 #loading-layer {

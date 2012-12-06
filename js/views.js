@@ -333,4 +333,14 @@
         TaskListView.currentList.clear();
     });
 
+    // Popups functionality. E.g., Donate button.
+    document.body.addEventListener('click', function (e) {
+        if (e.target.dataset.href) {
+            var popupElem = document.getElementById(e.target.dataset.href);
+            popupElem.classList.add('show');
+        } else if (e.target.classList.contains('popup-mask')) {
+            e.target.classList.remove('show');
+        }
+    });
+
 })();
