@@ -226,7 +226,7 @@ header button:active {
 
 .popup-mask > * {
     margin-top: 48px;
-    background-color: white;
+    background: -webkit-linear-gradient(top, #FFF 0%, #DDD 100%);
     box-shadow: 0 0 100px rgba(0, 0, 0, .7);
     border-radius: 3px;
     display: inline-block;
@@ -235,7 +235,11 @@ header button:active {
 
 #about-popup > * {
     text-align: left;
-    padding: 12px 24px;
+    padding: 12px 48px;
+}
+
+#about-popup .social-btn {
+    display: inline-block;
 }
 
 #loading-layer {
