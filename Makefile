@@ -1,6 +1,6 @@
 .PHONY: package logos
 
-package:
+package: logos
 	rm -f app.zip; \
 	./compress.sh; \
 	cd build; \
@@ -15,4 +15,9 @@ meta/logo/icon-48.png: meta/logo/icon.svg
 	inkscape -z -e meta/logo/icon-48.png -w 48 -h 48 meta/logo/icon.svg
 
 meta/logo/icon-128.png: meta/logo/icon.svg
-	inkscape -z -e meta/logo/icon-128.png -w 128 -h 128 meta/logo/icon.svg
+	inkscape -z -e meta/logo/icon-128.png -w 96 -h 96 meta/logo/icon.svg
+	convert meta/logo/icon-128.png \
+		-gravity center \
+		-background transparent \
+		-extent 128x128 \
+		meta/logo/icon-128.png
