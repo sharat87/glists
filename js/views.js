@@ -1,6 +1,7 @@
 (function () {
 
-    var tasksContainer = document.getElementById('tasks-container');
+    var byId = _.bind(document.getElementById, document),
+        tasksContainer = byId('tasks-container');
 
     // Being lazy.
     var V = Backbone.View.extend({
@@ -48,7 +49,7 @@
 
     // A helper function to create template renderer functions.
     var mktemplate = function (elem) {
-        var templateString = document.getElementById(elem).innerHTML;
+        var templateString = byId(elem).innerHTML;
         return function (data) {
             return Mustache.render(templateString, data);
         };
@@ -294,7 +295,7 @@
     });
 
     // New task form handler.
-    var newTaskForm = document.getElementById('new-task-form'),
+    var newTaskForm = byId('new-task-form'),
         newTaskTitle = newTaskForm.title;
 
     newTaskForm.addEventListener('submit', function (e) {
@@ -308,7 +309,7 @@
     });
 
     // New task toolbar button.
-    var addTaskButton = document.getElementById('add-task-btn');
+    var addTaskButton = byId('add-task-btn');
 
     addTaskButton.addEventListener('click', function () {
         var task = new TaskItem(),
@@ -328,7 +329,7 @@
     });
 
     // Clear completed button.
-    var clearBtn = document.getElementById('clear-btn');
+    var clearBtn = byId('clear-btn');
     clearBtn.addEventListener('click', function () {
         TaskListView.currentList.clear();
     });
@@ -336,7 +337,7 @@
     // Popups functionality. E.g., Donate button.
     document.body.addEventListener('click', function (e) {
         if (e.target.dataset.href) {
-            var popupElem = document.getElementById(e.target.dataset.href);
+            var popupElem = byId(e.target.dataset.href);
             popupElem.classList.add('show');
         } else if (e.target.classList.contains('popup-mask')) {
             e.target.classList.remove('show');
