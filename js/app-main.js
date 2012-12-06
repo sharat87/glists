@@ -34,20 +34,26 @@ authenticated(function (auth) {
     // Activate the social buttons.
     setTimeout(function () {
 
-        var addScript = function (url) {
-            var po = document.createElement('script');
-            po.async = true;
-            po.src = url;
-            document.body.appendChild(po);
-        };
+        var canonicalUrl = document.querySelector('link[rel=canonical]').href,
+            addScript = function (url) {
+                var js = document.createElement('script');
+                js.async = true;
+                js.src = url;
+                document.body.appendChild(js);
+            };
 
         // Twitter button.
-        document.getElementById('twitter-ln').dataset.url =
-            document.querySelector('link[rel=canonical]').href;
+        document.getElementById('twitter-ln').dataset.url = canonicalUrl;
         addScript('https://platform.twitter.com/widgets.js');
 
         // Google +1 button.
+        // Automatically picks up the canonical url.
         addScript('https://apis.google.com/js/plusone.js');
+
+        // Flattr button.
+        document.getElementById('flattr-ln').href = canonicalUrl;
+        addScript('https://api.flattr.com/js/0.6/load.js?'+
+                'mode=auto&uid=sharat87');
 
     }, 10);
 
