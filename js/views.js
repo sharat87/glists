@@ -1,4 +1,4 @@
-(function () {
+(function () { // ¬pub
 
     var byId = _.bind(document.getElementById, document),
         tasksContainer = byId('tasks-container');
@@ -55,7 +55,7 @@
         };
     };
 
-    var TaskView = window.TaskView = V.extend({
+    var TaskView = global.TaskView = V.extend({
         tagName: 'div',
         className: 'task-item',
 
@@ -97,7 +97,7 @@
         doneEditing: function () {
             var newTitle = this.qs('.title').innerText,
                 newNotes = this.qs('.notes').value,
-                newDue = asAdate(this.qs('.due-date').value),
+                newDue = global.asAdate(this.qs('.due-date').value),
                 newStatus = (this.qs('input[type=checkbox]').checked ?
                              'completed' : 'needsAction'),
                 old = this.model.toJSON();
@@ -106,7 +106,7 @@
 
             if (newTitle !== old.title ||
                     newNotes !== old.notes ||
-                    !ADate.areEqual(newDue, this.model.get('due')) ||
+                    !global.ADate.areEqual(newDue, this.model.get('due')) ||
                     newStatus !== old.status) {
                 this.model.save({
                     title: newTitle,
@@ -207,7 +207,7 @@
 
     });
 
-    var TasksCollectionView = window.TasksCollectionView = CV.extend({
+    var TasksCollectionView = global.TasksCollectionView = CV.extend({
 
         el: tasksContainer,
         modelView: TaskView,
@@ -218,7 +218,7 @@
 
     });
 
-    var TaskListView = window.TaskListView = V.extend({
+    var TaskListView = global.TaskListView = V.extend({
         tagName: 'li',
         className: 'task-list-item',
 
@@ -286,7 +286,7 @@
     // FIXME: Need a better way to do this.
     TaskListView.currentList = null;
 
-    var TaskListsCollectionView = window.TaskListsCollectionView = CV.extend({
+    var TaskListsCollectionView = global.TaskListsCollectionView = CV.extend({
         el: '#task-list-container',
         modelView: TaskListView,
         initialize: function () {
@@ -330,4 +330,4 @@
         }
     });
 
-})();
+})(); // ¬pub

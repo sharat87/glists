@@ -1,7 +1,7 @@
-(function () {
+(function () { // ¬pub
 
     // Call the given function, with authentication stuff handled.
-    window.authenticated = function (callback) {
+    global.authenticated = function (callback) {
 
         var verifyToken = function (auth) {
             $.ajax({
@@ -109,4 +109,4 @@
 
     };
 
-}());
+}()); // ¬pub

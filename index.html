@@ -4,7 +4,14 @@
     <head>
         <meta charset=utf-8>
         <link rel=canonical href=http://sharats.me>
+
+        <!-- ↓dev -->
+        <title>Glists Dev</title>
+        <!-- ↑dev -->
+
+        <!-- ↓pub --> <!--
         <title>Glists</title>
+        --> <!-- ↑pub -->
 
         <link rel=stylesheet href=css/styles.css>
 
@@ -18,14 +25,11 @@
                 </div>
             </header>
             <div id=left-body>
-                <!-- Should only be present for debugging purposes. -->
-                <!--
+                <!-- ↓dev -->
                 <a href=spec-runner.html style="display: block;
                     margin-top: 6px; padding: 3px 6px; text-decoration: none;
-                    background: #BBB; color: #333;">
-                    Spec runner
-                </a>
-                -->
+                    background: #BBB; color: #333;">Spec runner</a>
+                <!-- ↑dev -->
                 <ul id=task-list-container></ul>
                 <form id=new-task-list-form action="" method=POST>
                     <input type=text name=title placeholder="New list title">
@@ -114,6 +118,7 @@
         <script src=vendor/underscore-min.js></script>
         <script src=vendor/backbone.js></script>
         <script src=vendor/mustache.js></script>
+        <!-- ↓dev -->
         <script src=js/primer.js></script>
         <script src=js/adate.js></script>
         <script src=auth/auth-lib.js></script>
@@ -121,3 +126,7 @@
         <script src=js/views.js></script>
         <script src=js/layout.js></script>
         <script src=js/app-main.js></script>
+        <!-- ↑dev -->
+        <!-- ↓pub --> <!--
+        <script src=app.js></script>
+        --> <!-- ↑pub -->

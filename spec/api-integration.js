@@ -149,7 +149,7 @@ describe('API endpoint integration', function () {
 
     // Mark the task incomplete.
     testSequence.push(function (nextFn) {
-        var date = new ADate();
+        var date = new global.ADate();
         newTask.save({due: date}, {
             success: function (model, response) {
                 expect(newTask.get('due')).toEqual(date);

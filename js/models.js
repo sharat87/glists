@@ -1,4 +1,4 @@
-(function () {
+(function () { // ¬pub
 
     // Being lazy.
     var M = Backbone.Model, C = Backbone.Collection;
@@ -9,7 +9,7 @@
         return _.map(response.items, this.model.prototype.parse);
     };
 
-    var TaskItem = window.TaskItem = M.extend({
+    var TaskItem = global.TaskItem = M.extend({
 
         initialize: function (attrs) {
             this.on('change:status', function () {
@@ -27,7 +27,7 @@
 
         parse: function (response, xhr) {
             response.notes = response.notes || '';
-            response.due = asAdate(response.due);
+            response.due = global.asAdate(response.due);
 
             // Ignore the position attributes if we already have a
             // `this.position`. Note that these values, even if set, are unused,
@@ -210,7 +210,7 @@
         model: TaskItem
     });
 
-    var TaskList = window.TaskList = M.extend({
+    var TaskList = global.TaskList = M.extend({
 
         initialize: function () {
             this.tasks = new _TasksCollection();
@@ -248,7 +248,7 @@
 
     });
 
-    var TaskListsCollection = window.TaskListsCollection = C.extend({
+    var TaskListsCollection = global.TaskListsCollection = C.extend({
         model: TaskList,
         url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
 
@@ -292,4 +292,4 @@
         }
     });
 
-})();
+})(); // ¬pub

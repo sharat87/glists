@@ -1,4 +1,4 @@
-authenticated(function (auth) {
+global.authenticated(function (auth) {
 
     var taskListsCollection = new TaskListsCollection();
 

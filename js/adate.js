@@ -1,7 +1,7 @@
-(function () {
+(function () { // ¬pub
 
     // Implements a class for handling just date, without any knowledge of time.
-    var ADate = window.ADate = function (d) {
+    var ADate = global.ADate = function (d) {
         d = d ? new Date(d) : new Date();
         this.date = d.getDate();
         this.month = d.getMonth() + 1;
@@ -37,7 +37,7 @@
         }
     };
 
-    var asAdate = window.asAdate = function (d) {
+    var asAdate = global.asAdate = function (d) {
         return d ? new ADate(d) : null;
     };
 
@@ -45,4 +45,4 @@
         return (val < 10 ? '0' : '') + val;
     };
 
-}());
+}()); // ¬pub

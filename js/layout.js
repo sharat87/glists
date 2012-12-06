@@ -1,19 +1,18 @@
-(function (doc, win) {
-    "use strict";
+(function () { // ¬pub
 
-    var leftHeader = doc.querySelector('#list-panel > header'),
-        leftBody = doc.getElementById('left-body'),
-        rightHeader = doc.querySelector('#right-panel > header'),
-        rightBody = doc.getElementById('right-body');
+    var leftHeader = document.querySelector('#list-panel > header'),
+        leftBody = document.getElementById('left-body'),
+        rightHeader = document.querySelector('#right-panel > header'),
+        rightBody = document.getElementById('right-body');
 
     var reloadLayout = function () {
         leftBody.style.height =
-            (win.innerHeight - leftHeader.offsetHeight) + 'px';
+            (window.innerHeight - leftHeader.offsetHeight) + 'px';
         rightBody.style.height =
-            (win.innerHeight - rightHeader.offsetHeight) + 'px';
+            (window.innerHeight - rightHeader.offsetHeight) + 'px';
     };
 
-    win.addEventListener('resize', reloadLayout);
+    window.addEventListener('resize', reloadLayout);
     reloadLayout();
 
-}(document, window));
+}()); // ¬pub
