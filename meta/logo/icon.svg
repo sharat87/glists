@@ -1,0 +1,55 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg viewBox="0 0 128 128" version="1.1">
+
+    <defs>
+
+        <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop stop-color="#555" offset="0%"/>
+            <stop stop-color="#111" offset="100%"/>
+        </linearGradient>
+
+        <filter id="circleFilter">
+            <feOffset result="offOut" in="SourceColor" dx="0" dy="0"/>
+            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3"/>
+            <feBlend in="SourceGraphic" in2="blutOut" mode="normal"/>
+        </filter>
+
+        <filter id="tickFilter">
+            <feOffset result="offOut" in="SourceAlpha" dx="0" dy="3"/>
+            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="1"/>
+            <feBlend in="SourceGraphic" in2="blutOut" mode="normal"/>
+        </filter>
+
+        <filter id="tickLighting">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur1"/>
+            <feSpecularLighting result="specOut" in="blur1"
+                    specularConstant="1.2" specularExponent="12"
+                    lighting-color="#bbbbbb">
+                <feDistantLight azimuth="45" elevation="45"/>
+            </feSpecularLighting>
+            <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic"
+                    k1="0" k2="1" k3="1" k4="0"/>
+        </filter>
+
+    </defs>
+
+    <g filter="url(#tickLighting)">
+        <rect x="0" y="0" width="128" height="128" fill="url(#bg)"
+                stroke-width="0" rx="6" ry="6"/>
+
+        <circle cx="40" cy="85" r="30" stroke-width="10" stroke="#0493CC"
+                fill="none" filter="url(#circleFilter)"/>
+
+        <path d="M 10 80
+                q 22 8 40 20
+                q 21 -34 68 -85
+                q -55 80 -65 100
+                q -15 -15 -43 -35"
+                stroke="#00A1FF" stroke-width="2" fill="#00A1FF"
+                filter="url(#tickFilter)"/>
+    </g>
+
+    <!-- vim: se ai : -->
+</svg>
