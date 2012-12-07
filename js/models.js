@@ -183,6 +183,8 @@
         },
 
         sync: function (method, model, options) {
+            options = options || {};
+            options.data = '';
             options.url = this.task.url() + '/move';
 
             var qs = [],
@@ -228,6 +230,7 @@
 
         clear: function (options) {
             options = options || {};
+            options.data = '';
             var success = options.success, model = this;
             options.success = function () {
                 model.trigger('cleared');
