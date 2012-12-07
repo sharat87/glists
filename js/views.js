@@ -320,7 +320,13 @@
         TaskListView.currentList.clear();
     });
 
-    // Popups functionality. E.g., Donate button.
+    // Clear completed button.
+    var byDateBtn = byId('by-date-btn');
+    byDateBtn.addEventListener('click', function () {
+        console.info('sort by date');
+    });
+
+    // Popups functionality. E.g., About button.
     document.body.addEventListener('click', function (e) {
         if (e.target.dataset.href) {
             var popupElem = byId(e.target.dataset.href);
