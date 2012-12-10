@@ -1,7 +1,7 @@
 {
     "name": "Glists Dev",
     "version": "0.2.3",
-    "description": "An annoyingly simple checklists app, using on Google tasks",
+    "description": "An annoyingly simple checklists app, running on Google tasks",
     "app": {
         "launch": {
             "local_path": "index.html"
