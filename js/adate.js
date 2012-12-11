@@ -46,7 +46,7 @@
     };
 
     // ↓dev
-    _.extend(global, {
+    _.extend(window, {
         ADate: ADate,
         asAdate: asAdate
     });

@@ -3,9 +3,6 @@
 main () {
     prepare-build
 
-    # Delete the dev primer script.
-    rm js/dev-primer.js
-
     # Swith the global object from window to a plain local object.
     publish js/adate.js
     publish js/views.js
@@ -66,9 +63,7 @@ combine-dev-scripts () {
                 echo && /<script/ { print }
             ' "$html_file" \
             | sed 's/^.*src=//; s/>.*$//' \
-            | while read js_file; do
-                test -f $js_file && cat $js_file
-            done \
+            | xargs cat \
             | grep -v '¬pub'
 
         echo '}());'

@@ -337,7 +337,7 @@
     });
 
     // ↓dev
-    global.TaskListsCollectionView = TaskListsCollectionView;
+    window.TaskListsCollectionView = TaskListsCollectionView;
     // ↑dev
 
 })(); // ¬pub

@@ -113,7 +113,7 @@
     };
 
     // ↓dev
-    global.authenticated = authenticated;
+    window.authenticated = authenticated;
     // ↑dev
 
 }()); // ¬pub

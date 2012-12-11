@@ -296,7 +296,7 @@
     });
 
     // ↓dev
-    _.extend(global, {
+    _.extend(window, {
         TaskItem: TaskItem,
         TaskList: TaskList,
         TaskListsCollection: TaskListsCollection
