@@ -285,6 +285,7 @@
 
     // FIXME: Need a better way to do this.
     TaskListView.currentList = null;
+    var taskListsCollection = null;
 
     var TaskListsCollectionView = CV.extend({
         el: '#task-list-container',
@@ -292,6 +293,19 @@
         initialize: function () {
             this.collection.on('reset sync', this.render, this);
         }
+    });
+
+    // New task list form.
+    var newTaskListForm = byId('new-task-list-form'),
+        newListTitle = newTaskListForm.title;
+    newTaskListForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var newList = new TaskList({
+            title: newListTitle.value
+        });
+        taskListsCollection.add(newList);
+        newList.save();
+        newListTitle.value = '';
     });
 
     // New task toolbar button.
@@ -336,8 +350,30 @@
         }
     });
 
+    var initializeAppView = function () {
+        taskListsCollection = new TaskListsCollection();
+
+        taskListsCollection.on('selected', function () {
+            localStorage.lastViewedList = this.getSelectedList().get('id');
+        });
+
+        taskListsCollection.fetch({
+            success: function () {
+                new TaskListsCollectionView({
+                    collection: taskListsCollection
+                }).render();
+                taskListsCollection.setSelectedList(
+                    taskListsCollection.get(localStorage.lastViewedList) ||
+                    taskListsCollection.getListByTitle('Default List') ||
+                    taskListsCollection.at(0));
+                document.body.removeChild(byId('loading-layer'));
+            }
+        });
+
+    };
+
     // ↓dev
-    window.TaskListsCollectionView = TaskListsCollectionView;
+    window.initializeAppView = initializeAppView;
     // ↑dev
 
 })(); // ¬pub
