@@ -348,7 +348,13 @@
         TaskListView.currentList.clear();
     });
 
-    // Clear completed button.
+    // View in the user's order.
+    var myOrderBtn = byId('my-order-btn');
+    myOrderBtn.addEventListener('click', function () {
+        console.info('view in my order');
+    });
+
+    // View sorted by date.
     var byDateBtn = byId('by-date-btn');
     byDateBtn.addEventListener('click', function () {
         console.info('sort by date');
