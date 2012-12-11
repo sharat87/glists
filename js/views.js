@@ -337,12 +337,7 @@
     });
 
     // ↓dev
-    _.extend(global, {
-        TaskView: TaskView,
-        TasksCollectionView: TasksCollectionView,
-        TaskListView: TaskListView,
-        TaskListsCollectionView: TaskListsCollectionView
-    });
+    global.TaskListsCollectionView = TaskListsCollectionView;
     // ↑dev
 
 })(); // ¬pub
