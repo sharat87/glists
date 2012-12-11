@@ -234,17 +234,28 @@
             this.model.on('selected cleared', this.load, this);
             this.model.on('pre-clear', this.setLoading, this);
 
-            this.tasksCollectionView = new TasksCollectionView({
-                collection: this.model.tasks
-            });
+            var collectionViews = {
+                myOrder: new TasksCollectionView({
+                    collection: this.model.tasks
+                }),
+                byDate: new TasksByDateView({
+                    collection: this.model.tasks
+                })
+            };
 
-            this.tasksByDateView = new TasksByDateView({
-                collection: this.model.tasks
-            });
-
-            this.currentCollectionView = this.tasksCollectionView;
+            this.currentCollectionView = collectionViews.myOrder;
             this.model.tasks.on('reset', function () {
                 this.currentCollectionView.render();
+            }, this);
+
+            App.on('change:view', function (App, view, changes) {
+                this.currentCollectionView = collectionViews[view];
+
+                // If this is the currently displayed list, render it.
+                if (TaskListView.currentList === this.model) {
+                    this.currentCollectionView.render();
+                }
+
             }, this);
         },
 
@@ -351,13 +362,13 @@
     // View in the user's order.
     var myOrderBtn = byId('my-order-btn');
     myOrderBtn.addEventListener('click', function () {
-        console.info('view in my order');
+        App.set({view: 'myOrder'});
     });
 
     // View sorted by date.
     var byDateBtn = byId('by-date-btn');
     byDateBtn.addEventListener('click', function () {
-        console.info('sort by date');
+        App.set({view: 'byDate'});
     });
 
     // Popups functionality. E.g., About button.
@@ -390,6 +401,7 @@
             }
         });
 
+        App.set({view: 'my-order'}, {silent: true});
     };
 
     // ↓dev

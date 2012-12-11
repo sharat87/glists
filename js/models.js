@@ -9,6 +9,10 @@
         return _.map(response.items, this.model.prototype.parse);
     };
 
+    // A pseudo-model to handle app-level properties and events.
+    var App = new M({
+    });
+
     var TaskItem = M.extend({
 
         initialize: function (attrs) {
@@ -297,6 +301,7 @@
 
     // ↓dev
     _.extend(window, {
+        App: App,
         TaskItem: TaskItem,
         TaskList: TaskList,
         TaskListsCollection: TaskListsCollection
