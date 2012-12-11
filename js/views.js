@@ -62,6 +62,9 @@
         template: mktemplate('task-item-template'),
 
         initialize: function () {
+            // Dictates whether the UI should reflect position attributes.
+            this.showPosition = true;
+
             this.model.position.on('change:parent', this.updateIndent, this);
             this.model.on('change', this.render, this);
             this.model.on('destroy', function () {
@@ -83,14 +86,21 @@
             this.el.classList[templateData.checked ?
                 'add' : 'remove']('completed');
 
+            if (!this.showPosition) {
+                this.qs('.drag-handle').style.display = 'none';
+                this.el.style.marginLeft = '';
+            }
+
             this.updateIndent();
 
             return this;
         },
 
         updateIndent: function () {
-            this.el.style.marginLeft =
-                1.5 * this.model.getIndentLevel() + 'em';
+            if (this.showPosition) {
+                this.el.style.marginLeft =
+                    1.5 * this.model.getIndentLevel() + 'em';
+            }
             return this;
         },
 
@@ -229,8 +239,9 @@
                     dueValues.push(dueValue);
                 }
 
-                dated[dueValue].appendChild(
-                    this.modelView.forModel(model).render().el);
+                var view = this.modelView.forModel(model);
+                view.showPosition = false;
+                dated[dueValue].appendChild(view.render().el);
 
             }, this);
 
@@ -240,10 +251,13 @@
                 var dateValue = dueValues[i],
                     categoryHeader = dateValue === Infinity ?
                         'No due date' :
-                        new Date(dateValue).toLocaleDateString();
+                        new Date(dateValue).toLocaleDateString(),
+                    header = document.createElement('div');
 
-                viewFragment.appendChild(
-                    document.createTextNode(categoryHeader));
+                header.classList.add('task-header');
+                header.innerText = categoryHeader;
+
+                viewFragment.appendChild(header);
 
                 viewFragment.appendChild(dated[dateValue]);
             }

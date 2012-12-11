@@ -209,6 +209,11 @@ header button:active {
     opacity: .7;
 }
 
+.task-header {
+    padding-left: 6px;
+    margin-top: 12px;
+}
+
 .popup-mask {
     position: fixed;
     left: 0;
