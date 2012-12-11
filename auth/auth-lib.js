@@ -28,7 +28,6 @@
                         getNewToken(verifyToken);
                     }, Math.max(0, auth.expires_in - 60) * 1000);
 
-                    injectBackbone(auth);
                     callback(auth);
                 },
                 error: function () {
@@ -90,25 +89,6 @@
             }
             iframe.parentNode.removeChild(iframe);
         }, 3000);
-
-    };
-
-    // Add the access_token to all requests made by backbone to the REST end
-    // point.
-    var injectBackbone = function (auth) {
-
-        if (typeof Backbone === 'undefined') return;
-
-        var originalSync = Backbone.sync;
-
-        Backbone.sync = function (method, model, options) {
-            options = options || {};
-            options.beforeSend = function (xhr) {
-                xhr.setRequestHeader('Authorization',
-                                     'Bearer ' + auth.access_token);
-            };
-            return originalSync.call(this, method, model, options);
-        };
 
     };
 
