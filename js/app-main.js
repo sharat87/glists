@@ -51,7 +51,8 @@ global.authenticated(function (auth) {
         addScript('https://apis.google.com/js/plusone.js');
 
         // Flattr button.
-        document.getElementById('flattr-ln').href = canonicalUrl;
+        // FIXME: Points to my homepage!
+        document.getElementById('flattr-ln').href = 'http://sharats.me';
         addScript('https://api.flattr.com/js/0.6/load.js?'+
                 'mode=auto&uid=sharat87');
 
