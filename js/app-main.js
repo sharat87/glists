@@ -32,10 +32,14 @@ authenticated(function (auth) {
 
     Backbone.sync = function (method, model, options) {
         options = options || {};
+        var beforeSend = options.beforeSend;
+
         options.beforeSend = function (xhr) {
             xhr.setRequestHeader('Authorization',
-                                    'Bearer ' + auth.access_token);
+                                 'Bearer ' + auth.access_token);
+            if (beforeSend) return beforeSend.call(this, xhr);
         };
+
         return originalSync.call(this, method, model, options);
     };
 
