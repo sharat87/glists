@@ -208,14 +208,18 @@
     });
 
     var TasksCollectionView = CV.extend({
+        el: tasksContainer,
+        modelView: TaskView
+    });
 
+    var TasksByDateView = CV.extend({
         el: tasksContainer,
         modelView: TaskView,
-
-        initialize: function () {
-            this.collection.on('reset', this.render, this);
+        render: function () {
+            CV.prototype.render.apply(this, arguments);
+            this.el.appendChild(document.createTextNode('sorted by date'));
+            return this;
         }
-
     });
 
     var TaskListView = V.extend({
@@ -229,9 +233,19 @@
                         this.render, this);
             this.model.on('selected cleared', this.load, this);
             this.model.on('pre-clear', this.setLoading, this);
+
             this.tasksCollectionView = new TasksCollectionView({
                 collection: this.model.tasks
             });
+
+            this.tasksByDateView = new TasksByDateView({
+                collection: this.model.tasks
+            });
+
+            this.currentCollectionView = this.tasksCollectionView;
+            this.model.tasks.on('reset', function () {
+                this.currentCollectionView.render();
+            }, this);
         },
 
         render: function () {
@@ -249,7 +263,7 @@
         },
 
         setLoading: function () {
-            this.tasksCollectionView.el.innerHTML = 'Loading...';
+            this.currentCollectionView.el.innerHTML = 'Loading...';
         },
 
         events: {
