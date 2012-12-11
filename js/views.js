@@ -181,7 +181,8 @@
                 // Tab key for indentation changes.
                 if (e.which === 9) {
                     e.preventDefault();
-                    this.model[e.shiftKey ? 'dedent' : 'indent']();
+                    if (this.showPosition)
+                        this.model[e.shiftKey ? 'dedent' : 'indent']();
                 } else if (e.which === 27) {
                     // ESC key to cancel editing.
                     if (this.model.isNew()) {
