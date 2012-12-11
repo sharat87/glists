@@ -1,10 +1,11 @@
-.PHONY: package logos
+.PHONY: build package logos
 
-package: logos
-	rm -f app.zip; \
-	./compress.sh; \
-	cd build; \
-	apack ../app.zip *
+package: logos build
+	cd build && apack ../app.zip *
+
+build:
+	rm -f app.zip
+	./compress.sh
 
 logos: meta/logo/icon-16.png meta/logo/icon-48.png meta/logo/icon-128.png
 

@@ -9,7 +9,7 @@
         return _.map(response.items, this.model.prototype.parse);
     };
 
-    var TaskItem = global.TaskItem = M.extend({
+    var TaskItem = M.extend({
 
         initialize: function (attrs) {
             this.on('change:status', function () {
@@ -27,7 +27,7 @@
 
         parse: function (response, xhr) {
             response.notes = response.notes || '';
-            response.due = global.asAdate(response.due);
+            response.due = asAdate(response.due);
 
             // Ignore the position attributes if we already have a
             // `this.position`. Note that these values, even if set, are unused,
@@ -212,7 +212,7 @@
         model: TaskItem
     });
 
-    var TaskList = global.TaskList = M.extend({
+    var TaskList = M.extend({
 
         initialize: function () {
             this.tasks = new _TasksCollection();
@@ -251,7 +251,7 @@
 
     });
 
-    var TaskListsCollection = global.TaskListsCollection = C.extend({
+    var TaskListsCollection = C.extend({
         model: TaskList,
         url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
 
@@ -294,5 +294,13 @@
             return this._selectedTaskList;
         }
     });
+
+    // ↓dev
+    _.extend(global, {
+        TaskItem: TaskItem,
+        TaskList: TaskList,
+        TaskListsCollection: TaskListsCollection
+    });
+    // ↑dev
 
 })(); // ¬pub

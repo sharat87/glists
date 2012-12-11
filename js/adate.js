@@ -1,7 +1,7 @@
 (function () { // ¬pub
 
     // Implements a class for handling just date, without any knowledge of time.
-    var ADate = global.ADate = function (d) {
+    var ADate = function (d) {
         d = d ? new Date(d) : new Date();
         this.date = d.getDate();
         this.month = d.getMonth() + 1;
@@ -37,12 +37,19 @@
         }
     };
 
-    var asAdate = global.asAdate = function (d) {
+    var asAdate = function (d) {
         return d ? new ADate(d) : null;
     };
 
     var pad = function (val) {
         return (val < 10 ? '0' : '') + val;
     };
+
+    // ↓dev
+    _.extend(global, {
+        ADate: ADate,
+        asAdate: asAdate
+    });
+    // ↑dev
 
 }()); // ¬pub

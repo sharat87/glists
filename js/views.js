@@ -55,7 +55,7 @@
         };
     };
 
-    var TaskView = global.TaskView = V.extend({
+    var TaskView = V.extend({
         tagName: 'div',
         className: 'task-item',
 
@@ -97,7 +97,7 @@
         doneEditing: function () {
             var newTitle = this.qs('.title').innerText,
                 newNotes = this.qs('.notes').value,
-                newDue = global.asAdate(this.qs('.due-date').value),
+                newDue = asAdate(this.qs('.due-date').value),
                 newStatus = (this.qs('input[type=checkbox]').checked ?
                              'completed' : 'needsAction'),
                 old = this.model.toJSON();
@@ -106,7 +106,7 @@
 
             if (newTitle !== old.title ||
                     newNotes !== old.notes ||
-                    !global.ADate.areEqual(newDue, this.model.get('due')) ||
+                    !ADate.areEqual(newDue, this.model.get('due')) ||
                     newStatus !== old.status) {
                 this.model.save({
                     title: newTitle,
@@ -207,7 +207,7 @@
 
     });
 
-    var TasksCollectionView = global.TasksCollectionView = CV.extend({
+    var TasksCollectionView = CV.extend({
 
         el: tasksContainer,
         modelView: TaskView,
@@ -218,7 +218,7 @@
 
     });
 
-    var TaskListView = global.TaskListView = V.extend({
+    var TaskListView = V.extend({
         tagName: 'li',
         className: 'task-list-item',
 
@@ -286,7 +286,7 @@
     // FIXME: Need a better way to do this.
     TaskListView.currentList = null;
 
-    var TaskListsCollectionView = global.TaskListsCollectionView = CV.extend({
+    var TaskListsCollectionView = CV.extend({
         el: '#task-list-container',
         modelView: TaskListView,
         initialize: function () {
@@ -335,5 +335,14 @@
             e.target.classList.remove('show');
         }
     });
+
+    // ↓dev
+    _.extend(global, {
+        TaskView: TaskView,
+        TasksCollectionView: TasksCollectionView,
+        TaskListView: TaskListView,
+        TaskListsCollectionView: TaskListsCollectionView
+    });
+    // ↑dev
 
 })(); // ¬pub

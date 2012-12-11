@@ -5,6 +5,10 @@ main () {
 
     # Swith the global object from window to a plain local object.
     publish js/primer.js
+    publish js/adate.js
+    publish js/views.js
+    publish js/models.js
+    publish auth/auth-lib.js
 
     # Combine dev scripts into the publish script.
     combine-dev-scripts index.html app.js
