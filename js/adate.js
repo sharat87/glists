@@ -8,16 +8,24 @@
         this.year = d.getFullYear();
     };
 
+    ADate.prototype.toDate = function () {
+        return new Date(this.toString());
+    };
+
     ADate.prototype.toString = function () {
         return this.year + '-' + pad(this.month) + '-' + pad(this.date);
     };
 
     ADate.prototype.toISOString = function () {
-        return new Date(this.toString()).toISOString();
+        return this.toDate().toISOString();
+    };
+
+    ADate.prototype.toLocaleString = function () {
+        return this.toDate().toLocaleDateString();
     };
 
     ADate.prototype.valueOf = function () {
-        return new Date(this.toString()).valueOf();
+        return this.toDate().valueOf();
     };
 
     ADate.prototype.equals = function (other) {

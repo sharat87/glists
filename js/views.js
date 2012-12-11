@@ -216,8 +216,41 @@
         el: tasksContainer,
         modelView: TaskView,
         render: function () {
-            CV.prototype.render.apply(this, arguments);
-            this.el.appendChild(document.createTextNode('sorted by date'));
+            var viewFragment = document.createDocumentFragment(),
+                dated = {},
+                dueValues = [];
+
+            this.collection.each(function (model) {
+                var due = model.get('due'),
+                    dueValue = due ? due.valueOf() : Infinity;
+
+                if (!dated[dueValue]) {
+                    dated[dueValue] = document.createDocumentFragment();
+                    dueValues.push(dueValue);
+                }
+
+                dated[dueValue].appendChild(
+                    this.modelView.forModel(model).render().el);
+
+            }, this);
+
+            dueValues.sort();
+
+            for (var i = 0, len = dueValues.length; i < len; ++i) {
+                var dateValue = dueValues[i],
+                    categoryHeader = dateValue === Infinity ?
+                        'No due date' :
+                        new Date(dateValue).toLocaleDateString();
+
+                viewFragment.appendChild(
+                    document.createTextNode(categoryHeader));
+
+                viewFragment.appendChild(dated[dateValue]);
+            }
+
+            this.el.innerHTML = '';
+            this.el.appendChild(viewFragment);
+
             return this;
         }
     });
