@@ -64,12 +64,6 @@
         initialize: function () {
             // Dictates whether the UI should reflect position attributes.
             this.showPosition = true;
-
-            App.on('change:view', function (App, view, changes) {
-                this.showPosition = view !== 'byDate';
-                this.render();
-            }, this);
-
             this.model.position.on('change:parent', this.updateIndent, this);
             this.model.on('change', this.render, this);
             this.model.on('destroy', function () {
@@ -225,12 +219,24 @@
 
     var TasksCollectionView = CV.extend({
         el: tasksContainer,
-        modelView: TaskView
+        render: function () {
+            var modelsFragment = document.createDocumentFragment();
+
+            this.collection.each(function (model) {
+                var view = TaskView.forModel(model);
+                view.showPosition = true;
+                modelsFragment.appendChild(view.render().el);
+            }, this);
+
+            this.el.innerHTML = '';
+            this.el.appendChild(modelsFragment);
+
+            return this;
+        }
     });
 
     var TasksByDateView = CV.extend({
         el: tasksContainer,
-        modelView: TaskView,
         template: mktemplate('task-header-template'),
         render: function () {
             var viewFragment = document.createDocumentFragment(),
@@ -246,7 +252,8 @@
                     dueValues.push(dueValue);
                 }
 
-                var view = this.modelView.forModel(model);
+                var view = TaskView.forModel(model);
+                view.showPosition = false;
                 dated[dueValue].appendChild(view.render().el);
 
             }, this);
@@ -483,7 +490,7 @@
             }
         });
 
-        App.set({view: 'my-order'}, {silent: true});
+        App.set({view: 'myOrder'}, {silent: true});
     };
 
     // ↓dev
