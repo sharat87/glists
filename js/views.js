@@ -65,6 +65,11 @@
             // Dictates whether the UI should reflect position attributes.
             this.showPosition = true;
 
+            App.on('change:view', function (App, view, changes) {
+                this.showPosition = view !== 'byDate';
+                this.render();
+            }, this);
+
             this.model.position.on('change:parent', this.updateIndent, this);
             this.model.on('change', this.render, this);
             this.model.on('destroy', function () {
@@ -241,7 +246,6 @@
                 }
 
                 var view = this.modelView.forModel(model);
-                view.showPosition = false;
                 dated[dueValue].appendChild(view.render().el);
 
             }, this);
