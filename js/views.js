@@ -231,6 +231,7 @@
     var TasksByDateView = CV.extend({
         el: tasksContainer,
         modelView: TaskView,
+        template: mktemplate('task-header-template'),
         render: function () {
             var viewFragment = document.createDocumentFragment(),
                 dated = {},
@@ -256,14 +257,10 @@
                 var dateValue = dueValues[i],
                     categoryHeader = dateValue === Infinity ?
                         'No due date' :
-                        new Date(dateValue).toLocaleDateString(),
-                    header = document.createElement('div');
+                        new Date(dateValue).toLocaleDateString();
 
-                header.classList.add('task-header');
-                header.innerText = categoryHeader;
-
-                viewFragment.appendChild(header);
-
+                viewFragment.appendChild(
+                    new TaskHeaderView(categoryHeader).render().el);
                 viewFragment.appendChild(dated[dateValue]);
             }
 
@@ -272,6 +269,39 @@
 
             return this;
         }
+    });
+
+    var TaskHeaderView = V.extend({
+        className: 'task-header',
+        template: mktemplate('task-header-template'),
+
+        initialize: function (due) {
+            this.due = due;
+            this.collapsed = false;
+        },
+
+        render: function () {
+            this.el.innerHTML = this.template({
+                due: this.due,
+                collapsed: this.collapsed
+            });
+            return this;
+        },
+
+        toggleCollapsed: function () {
+            this.collapsed = !this.collapsed;
+            this.render();
+            var next = this.el.nextSibling;
+            while (next && next.classList.contains('task-item')) {
+                next.style.display = this.collapsed ? 'none' : '';
+                next = next.nextSibling;
+            }
+        },
+
+        events: {
+            'click .expando-btn': 'toggleCollapsed'
+        }
+
     });
 
     var TaskListView = V.extend({
