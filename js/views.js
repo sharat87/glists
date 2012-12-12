@@ -39,6 +39,25 @@
         };
     };
 
+    var toolbarView = new (V.extend({
+        el: document.querySelector('#right-panel > header'),
+        initialize: function () {
+            console.info('new toolbar view');
+            App.on('change:view', this.render, this);
+            this.render();
+        },
+        render: function () {
+            if (this._currentView) {
+                this._currentView.classList.remove('current');
+            }
+            this._currentView = this.qs({
+                    myOrder: '.my-order-btn',
+                    byDate: '.by-date-btn'
+                }[App.get('view')])
+            this._currentView.classList.add('current');
+        }
+    }));
+
     var TaskView = V.extend({
         tagName: 'div',
         className: 'task-item',
@@ -487,8 +506,6 @@
                 document.body.removeChild(byId('loading-layer'));
             }
         });
-
-        App.set({view: 'myOrder'}, {silent: true});
     };
 
     // ↓dev

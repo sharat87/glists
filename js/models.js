@@ -11,6 +11,7 @@
 
     // A pseudo-model to handle app-level properties and events.
     var App = new M({
+        view: 'myOrder'
     });
 
     var TaskItem = M.extend({

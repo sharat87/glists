@@ -51,7 +51,8 @@ header button {
     font-size: 1.1em;
 }
 
-header button:hover {
+header button:hover,
+header button.current {
     color: #333;
     background-color: #CCC;
 }
