@@ -248,7 +248,7 @@
                 var dateValue = dueValues[i],
                     categoryHeader = dateValue === Infinity ?
                         'No due date' :
-                        new Date(dateValue).toLocaleDateString();
+                        new ADate(dateValue).toLocaleString();
 
                 viewFragment.appendChild(
                     new TaskHeaderView(categoryHeader).render().el);

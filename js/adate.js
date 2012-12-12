@@ -21,7 +21,9 @@
     };
 
     ADate.prototype.toLocaleString = function () {
-        return this.toDate().toLocaleDateString();
+        var today = new ADate();
+        return this.equals(today) ?
+            'Today' : this.toDate().toLocaleDateString();
     };
 
     ADate.prototype.valueOf = function () {
