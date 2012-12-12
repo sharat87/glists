@@ -68,6 +68,22 @@
             // View sorted by date.
             'click .by-date-btn': function (e) {
                 App.set({view: 'byDate'});
+            },
+
+            'click .clear-btn': function (e) {
+                TaskListView.currentList.clear();
+            },
+
+            'click .add-task-btn': function (e) {
+                var task = new TaskItem(),
+                    view = new TaskView({model: task});
+
+                TaskListView.currentList.tasks.add(task, {at: 0});
+
+                tasksContainer
+                    .insertBefore(view.render().el, tasksContainer.firstChild);
+
+                view.startEditing();
             }
 
         }
@@ -455,30 +471,12 @@
         newListTitle.value = '';
     });
 
-    // New task toolbar button.
-    var addTaskButton = byId('add-task-btn');
-
-    addTaskButton.addEventListener('click', function () {
-        var task = new TaskItem(),
-            view = new TaskView({model: task});
-        TaskListView.currentList.tasks.add(task, {at: 0});
-        tasksContainer
-            .insertBefore(view.render().el, tasksContainer.firstChild);
-        view.startEditing();
-    });
-
     // Make task items reorder-able by dragging their handles.
     $(tasksContainer).sortable({
         handle: '.drag-handle',
         stop: function (e, ui) {
             ui.item.trigger('moved');
         }
-    });
-
-    // Clear completed button.
-    var clearBtn = byId('clear-btn');
-    clearBtn.addEventListener('click', function () {
-        TaskListView.currentList.clear();
     });
 
     // Popups functionality. E.g., About button.
