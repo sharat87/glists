@@ -41,11 +41,12 @@
 
     var toolbarView = new (V.extend({
         el: document.querySelector('#right-panel > header'),
+
         initialize: function () {
-            console.info('new toolbar view');
             App.on('change:view', this.render, this);
             this.render();
         },
+
         render: function () {
             if (this._currentView) {
                 this._currentView.classList.remove('current');
@@ -55,7 +56,22 @@
                     byDate: '.by-date-btn'
                 }[App.get('view')])
             this._currentView.classList.add('current');
+        },
+
+        events: {
+
+            // View in the user's order.
+            'click .my-order-btn': function (e) {
+                App.set({view: 'myOrder'});
+            },
+
+            // View sorted by date.
+            'click .by-date-btn': function (e) {
+                App.set({view: 'byDate'});
+            }
+
         }
+
     }));
 
     var TaskView = V.extend({
@@ -463,18 +479,6 @@
     var clearBtn = byId('clear-btn');
     clearBtn.addEventListener('click', function () {
         TaskListView.currentList.clear();
-    });
-
-    // View in the user's order.
-    var myOrderBtn = byId('my-order-btn');
-    myOrderBtn.addEventListener('click', function () {
-        App.set({view: 'myOrder'});
-    });
-
-    // View sorted by date.
-    var byDateBtn = byId('by-date-btn');
-    byDateBtn.addEventListener('click', function () {
-        App.set({view: 'byDate'});
     });
 
     // Popups functionality. E.g., About button.
