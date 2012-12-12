@@ -29,23 +29,7 @@
 
     // A View class similar to `Backbone.View`, intended to be used with
     // Collections.
-    var CV = V.extend({
-        // Render every item in `this.collection` and add it to this view's
-        // `el`. Uses the `this.modelView` class to render each item.
-        render: function () {
-            var modelsFragment = document.createDocumentFragment();
-
-            this.collection.each(function (model) {
-                modelsFragment.appendChild(
-                    this.modelView.forModel(model).render().el);
-            }, this);
-
-            this.el.innerHTML = '';
-            this.el.appendChild(modelsFragment);
-
-            return this;
-        }
-    });
+    var CV = V;
 
     // A helper function to create template renderer functions.
     var mktemplate = function (elem) {
@@ -403,9 +387,23 @@
 
     var TaskListsCollectionView = CV.extend({
         el: '#task-list-container',
-        modelView: TaskListView,
+
         initialize: function () {
             this.collection.on('reset sync', this.render, this);
+        },
+
+        render: function () {
+            var modelsFragment = document.createDocumentFragment();
+
+            this.collection.each(function (model) {
+                modelsFragment.appendChild(
+                    TaskListView.forModel(model).render().el);
+            }, this);
+
+            this.el.innerHTML = '';
+            this.el.appendChild(modelsFragment);
+
+            return this;
         }
     });
 
