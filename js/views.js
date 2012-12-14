@@ -479,8 +479,10 @@
         newListTitle = newTaskListForm.title;
     newTaskListForm.addEventListener('submit', function (e) {
         e.preventDefault();
+        var title = newListTitle.value;
+        if (!title) return;
         var newList = new TaskList({
-            title: newListTitle.value
+            title: title
         });
         taskListsCollection.add(newList);
         newList.save();
