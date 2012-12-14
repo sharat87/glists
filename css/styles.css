@@ -142,9 +142,6 @@ header button:active {
 }
 
 #new-task-list-form input[type=submit] {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
     position: absolute;
     right: 0;
     top: 0;
