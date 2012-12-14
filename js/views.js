@@ -10,6 +10,10 @@
         },
         qsa: function (selector) {
             return this.el.querySelectorAll(selector);
+        },
+        isActive: function () {
+            // FIXME: Icky implementation.
+            return this === this.$el.data('renderer');
         }
     });
 
@@ -266,6 +270,8 @@
             this.el.innerHTML = '';
             this.el.appendChild(modelsFragment);
 
+            this.$el.data('renderer', this);
+
             return this;
         }
     });
@@ -273,6 +279,13 @@
     var TasksByDateView = CV.extend({
         el: tasksContainer,
         template: mktemplate('task-header-template'),
+
+        initialize: function () {
+            this.collection.on('sync', function (e) {
+                if (this.isActive()) this.render();
+            }, this);
+        },
+
         render: function () {
             var viewFragment = document.createDocumentFragment(),
                 dated = {},
@@ -309,8 +322,11 @@
             this.el.innerHTML = '';
             this.el.appendChild(viewFragment);
 
+            this.$el.data('renderer', this);
+
             return this;
         }
+
     });
 
     var TaskHeaderView = V.extend({
