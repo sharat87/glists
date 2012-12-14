@@ -281,7 +281,7 @@
         template: mktemplate('task-header-template'),
 
         initialize: function () {
-            this.collection.on('sync', function (e) {
+            this.collection.on('sync destroy', function (e) {
                 if (this.isActive()) this.render();
             }, this);
         },
