@@ -57,6 +57,7 @@
                 i = this.collection.indexOf(this) + 1,
                 children = [];
 
+            // Find all immediate children of this task.
             while (true) {
                 var child = this.collection.at(i);
                 if (!child) break;
@@ -72,10 +73,26 @@
                 ++i;
             }
 
-            var parent = this.position.get('parent') || null;
-            i = children.length;
-            while (i-- > 0) {
-                children[i].position.save({parent: parent});
+            // Copy parent to all immediate children and previous to the first
+            // child.
+            // FIXME: Getting `previous` should automatically
+            // `calculatePrevious`.
+            if (children.length) {
+                this.calculatePrevious();
+
+                var parent = this.position.get('parent'),
+                    previous = this.position.get('previous');
+
+                i = 0;
+
+                children[i++].position.save({
+                    parent: parent,
+                    previous: previous
+                });
+
+                while (i < children.length) {
+                    children[i++].position.save({parent: parent});
+                }
             }
 
             return M.prototype.destroy.apply(this, arguments);
