@@ -192,6 +192,10 @@
             }, this);
         },
 
+        get: function () {
+            return M.prototype.get.apply(this, arguments) || null;
+        },
+
         isDirty: function () {
             return this._dirty;
         },

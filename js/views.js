@@ -215,12 +215,22 @@
 
         addTaskBelow: function () {
             var task = new TaskItem(),
-                index = TaskListView.currentList.tasks.indexOf(this);
+                index = TaskListView.currentList.tasks.indexOf(this.model),
+                nextTask = TaskListView.currentList.tasks.at(index + 1);
 
-            task.position.set({
-                parent: this.model.position.get('parent') || null,
-                previous: this.model.get('id')
-            });
+            if (nextTask &&
+                nextTask.getIndentLevel() > this.model.getIndentLevel()) {
+                // Next task is a child.
+                task.position.set({
+                    parent: this.model.get('id')
+                });
+            } else {
+                // Next task is a sibling.
+                task.position.set({
+                    parent: this.model.position.get('parent'),
+                    previous: this.model.get('id')
+                });
+            }
 
             TaskListView.currentList.tasks.add(task, {at: index + 1});
 
@@ -232,14 +242,14 @@
 
         addTaskAbove: function () {
             var task = new TaskItem(),
-                index = TaskListView.currentList.tasks.indexOf(this);
+                index = TaskListView.currentList.tasks.indexOf(this.model);
 
             task.position.set({
                 parent: this.model.position.get('parent') || null,
                 previous: this.model.position.get('previous')
             });
 
-            TaskListView.currentList.tasks.add(task, {at: index - 1});
+            TaskListView.currentList.tasks.add(task, {at: index});
 
             var view = new TaskView({model: task});
             tasksContainer.insertBefore(view.render().el, this.el);
