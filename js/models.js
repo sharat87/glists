@@ -52,6 +52,35 @@
             return task;
         },
 
+        destroy: function () {
+            var expectedChildIndent = this.getIndentLevel() + 1,
+                i = this.collection.indexOf(this) + 1,
+                children = [];
+
+            while (true) {
+                var child = this.collection.at(i);
+                if (!child) break;
+
+                var childIndent = child.getIndentLevel();
+                if (childIndent === expectedChildIndent) {
+                    children.push(child);
+                    // child.position.save({parent: parent});
+                } else if (childIndent < expectedChildIndent) {
+                    break;
+                }
+
+                ++i;
+            }
+
+            var parent = this.position.get('parent') || null;
+            i = children.length;
+            while (i-- > 0) {
+                children[i].position.save({parent: parent});
+            }
+
+            return M.prototype.destroy.apply(this, arguments);
+        },
+
         getIndentLevel: function () {
             var parentId = this.position.get('parent');
             if (parentId) {
