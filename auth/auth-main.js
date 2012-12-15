@@ -5,8 +5,13 @@
         i = props.length;
 
     while (i-- > 0) {
-        var parts = props[i].split('=');
-        auth[parts[0]] = parts[1];
+        var parts = props[i].split('='),
+            name = parts[0];
+        // Camel case-ify from underscores.
+        name = name.replace(/\_([a-z])/g, function (_, c) {
+            return c.toUpperCase();
+        });
+        auth[name] = parts[1];
     }
 
     if (auth.expiresIn) {

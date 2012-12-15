@@ -11,7 +11,7 @@
             /*jshint camelcase:false */
             $.ajax({
                 url: 'https://www.googleapis.com/oauth2/v1/tokeninfo',
-                data: {access_token: auth.access_token},
+                data: {access_token: auth.accessToken},
                 dataType: 'json',
                 success: function (response) {
                     if (response.audience !== CLIENT_ID) {
@@ -21,11 +21,7 @@
                     }
 
                     auth.verified = true;
-
-                    auth.accessToken = auth.access_token;
                     auth.expiresIn = response.expires_in;
-                    delete auth.access_token;
-                    delete auth.expires_in;
 
                     localStorage.auth = JSON.stringify(auth);
 
