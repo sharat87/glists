@@ -286,14 +286,17 @@
                     if (this.showPosition)
                         this.model[e.shiftKey ? 'dedent' : 'indent']();
 
-                } else if (e.which === 27) {
+                }
+            },
+
+            'keydown .title,.due-date': function (e) {
+                if (e.which === 27) {
                     // ESC key to cancel editing.
                     if (this.model.isNew()) {
                         this.model.destroy();
                     } else {
                         this.closeEditing().render();
                     }
-
                 }
             },
 
