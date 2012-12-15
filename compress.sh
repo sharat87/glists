@@ -12,6 +12,7 @@ main () {
     # Combine dev scripts into the publish script.
     combine-dev-scripts index.html app.js
     java -jar closure-compiler/compiler.jar \
+        --language_in=ECMASCRIPT5_STRICT \
         --js_output_file app-min.js \
         app.js
     mv app-min.js app.js
@@ -57,6 +58,7 @@ combine-dev-scripts () {
 
     {
         echo '(function () {'
+        echo '"use strict";'
 
         awk '
                 /↓dev/ { echo = 1; next }
@@ -65,9 +67,10 @@ combine-dev-scripts () {
             ' "$html_file" \
             | sed 's/^.*src=//; s/>.*$//' \
             | xargs cat \
-            | grep -v '¬pub'
+            | grep -v "¬pub\|'use strict';$"
 
         echo '}());'
+
     } > "$outjs"
 
 }
