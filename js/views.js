@@ -143,7 +143,8 @@
         },
 
         doneEditing: function () {
-            var newTitle = this.qs('.title').innerText,
+            var isNew = this.model.isNew(),
+                newTitle = this.qs('.title').innerText,
                 newNotes = this.qs('.notes').value,
                 newDue = asAdate(this.qs('.due-date').value),
                 newStatus = (this.qs('input[type=checkbox]').checked ?
@@ -161,10 +162,18 @@
                     status: newStatus,
                     notes: newNotes,
                     due: newDue
+                }, {
+                    success: _.bind(function () {
+                        if (isNew) {
+                            this.model.position.saveIfDirty();
+                        }
+                    }, this)
                 });
             }
 
-            this.model.position.saveIfDirty();
+            if (!isNew) {
+                this.model.position.saveIfDirty();
+            }
             return this;
         },
 
@@ -204,11 +213,28 @@
             return this;
         },
 
+        addTaskBelow: function () {
+            var task = new TaskItem(),
+                index = TaskListView.currentList.tasks.indexOf(this);
+
+            task.position.set({
+                parent: this.model.position.get('parent') || null,
+                previous: this.model.get('id')
+            });
+
+            TaskListView.currentList.tasks.add(task, {at: index + 1});
+
+            var view = new TaskView({model: task});
+            tasksContainer.insertBefore(view.render().el, this.el.nextSibling);
+
+            view.startEditing();
+        },
+
         events: {
 
             'focus .title': 'startEditing',
 
-            'keydown .title,.due-date': function (e) {
+            'keydown .due-date': function (e) {
                 if (e.which === 13) {
                     e.preventDefault();
                     this.doneEditing();
@@ -216,11 +242,21 @@
             },
 
             'keydown .title': function (e) {
-                // Tab key for indentation changes.
-                if (e.which === 9) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    this.doneEditing();
+
+                    // Return key.
+                    if (e.shiftKey) {
+                        this.addTaskBelow();
+                    }
+
+                } else if (e.which === 9) {
+                    // Tab key for indentation changes.
                     e.preventDefault();
                     if (this.showPosition)
                         this.model[e.shiftKey ? 'dedent' : 'indent']();
+
                 } else if (e.which === 27) {
                     // ESC key to cancel editing.
                     if (this.model.isNew()) {
@@ -228,6 +264,7 @@
                     } else {
                         this.closeEditing().render();
                     }
+
                 }
             },
 
