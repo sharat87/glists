@@ -9,12 +9,13 @@
     "noempty": true,
     "nonew": true,
     "quotmark": "single",
-    "undef": false,
+    "undef": true,
     "unused": true,
     "strict": false,
     "trailing": true,
     "maxparams": 4,
     "maxlen": 80,
     "boss": true,
-    "expr": true
+    "expr": true,
+    "browser": true
 }

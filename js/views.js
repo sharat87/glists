@@ -1,4 +1,8 @@
 (function () { // ¬pub
+    /*global $:false _:false Backbone:false Mustache:false
+       confirm:false prompt:false
+       ADate:false asAdate:false App:false TaskItem:false TaskList:false
+       TaskListsCollection:false */
 
     var byId = _.bind(document.getElementById, document),
         tasksContainer = byId('tasks-container');

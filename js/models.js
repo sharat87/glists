@@ -1,4 +1,5 @@
 (function () { // ¬pub
+    /*global Backbone:false _:false asAdate:false */
 
     // Being lazy.
     var M = Backbone.Model, C = Backbone.Collection;

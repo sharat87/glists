@@ -1,3 +1,6 @@
+/*jshint devel:true */
+/*global describe:false expect:false it:false runs:false waitsFor:false
+    ADate:false TaskItem:false TaskList:false TaskListsCollection:false */
 describe('API endpoint integration', function () {
 
     var testSequence = [], // The sequence of calling the test functions.

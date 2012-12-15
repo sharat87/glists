@@ -1,3 +1,4 @@
+/*global authenticated:false Backbone:false initializeAppView:false */
 // Activate the social buttons.
 setTimeout(function () {
 

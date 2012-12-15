@@ -1,16 +1,19 @@
 (function () {
+    /*global chrome:false alert:false */
 
     var auth = {},
         props = location.hash.substr(1).split('&'),
-        i = props.length;
+        i = props.length,
+        camelCaseify = function (name) {
+            // Camel case-ify from underscores.
+            return name.replace(/\_([a-z])/g, function (_, c) {
+                return c.toUpperCase();
+            });
+        };
 
     while (i-- > 0) {
         var parts = props[i].split('='),
-            name = parts[0];
-        // Camel case-ify from underscores.
-        name = name.replace(/\_([a-z])/g, function (_, c) {
-            return c.toUpperCase();
-        });
+            name = camelCaseify(parts[0]);
         auth[name] = parts[1];
     }
 

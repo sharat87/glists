@@ -1,4 +1,6 @@
 (function () { // ¬pub
+    /*jshint nonstandard:true */
+    /*global $:false chrome:false */
 
     var CLIENT_ID = '151476160203-t29qsdoev1sv2cmgnjld050j4avqrsr3' +
             '.apps.googleusercontent.com',
@@ -32,13 +34,13 @@
                     callback(auth);
                 },
                 error: function () {
-                    console.info('removing auth details');
                     localStorage.removeItem('auth');
                     getNewToken(verifyToken);
                 }
             });
         };
 
+        var auth;
         if (typeof localStorage.auth === 'undefined' ||
                 (auth = JSON.parse(localStorage.auth)) === null) {
             getNewToken(verifyToken);
@@ -65,14 +67,11 @@
 
     // Get a new token, intelligently.
     getNewToken = function (callback) {
-        var tokenRecieved = false,
-            startTime = new Date().valueOf();
+        var tokenRecieved = false;
 
         // This will be called if we get the token from the iframe.
         authCallback = function (auth) {
             tokenRecieved = true;
-            console.info('Getting token via iframe took',
-                         new Date().valueOf() - startTime, 'seconds.');
             callback(auth);
         };
 

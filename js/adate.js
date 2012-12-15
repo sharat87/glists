@@ -55,10 +55,8 @@
     };
 
     // ↓dev
-    _.extend(window, {
-        ADate: ADate,
-        asAdate: asAdate
-    });
+    window.ADate = ADate;
+    window.asAdate = asAdate;
     // ↑dev
 
 }()); // ¬pub
