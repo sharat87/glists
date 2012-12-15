@@ -41,7 +41,7 @@
             // Ignore the position attributes if we already have a
             // `this.position`. Note that these values, even if set, are unused,
             // so removing this piece of code should have no effect.
-            if (this.position) {
+            if (this && this.position) {
                 delete response.parent;
                 delete response.position;
             }
