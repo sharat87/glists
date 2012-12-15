@@ -8,7 +8,6 @@ package: logos build
 	cd build && apack ../app.zip *
 
 jshint:
-	jshint --config jshintrc js
 	find . -type d \( -name vendor -or -name build \) -prune \
 		-or -type f -name \*.js -exec jshint --config jshintrc '{}' \+
 
