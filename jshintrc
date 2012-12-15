@@ -11,7 +11,7 @@
     "quotmark": "single",
     "undef": true,
     "unused": true,
-    "strict": false,
+    "strict": true,
     "trailing": true,
     "maxparams": 4,
     "maxlen": 80,

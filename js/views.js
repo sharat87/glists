@@ -3,6 +3,7 @@
        confirm:false prompt:false
        ADate:false asAdate:false App:false TaskItem:false TaskList:false
        TaskListsCollection:false */
+    'use strict';
 
     var byId = _.bind(document.getElementById, document),
         tasksContainer = byId('tasks-container');

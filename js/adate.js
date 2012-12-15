@@ -1,4 +1,5 @@
 (function () { // ¬pub
+    'use strict';
 
     // Implements a class for handling just date, without any knowledge of time.
     var ADate = function (d) {

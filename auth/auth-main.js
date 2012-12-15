@@ -1,5 +1,6 @@
 (function () {
     /*global chrome:false alert:false */
+    'use strict';
 
     var auth = {},
         props = location.hash.substr(1).split('&'),

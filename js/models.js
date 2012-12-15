@@ -1,5 +1,6 @@
 (function () { // ¬pub
     /*global Backbone:false _:false asAdate:false */
+    'use strict';
 
     // Being lazy.
     var M = Backbone.Model, C = Backbone.Collection;

@@ -2,6 +2,7 @@
 /*global describe:false expect:false it:false runs:false waitsFor:false
     ADate:false TaskItem:false TaskList:false TaskListsCollection:false */
 describe('API endpoint integration', function () {
+    'use strict';
 
     var testSequence = [], // The sequence of calling the test functions.
         testSequenceTimeout = 17000, // Timeout to wait for the tests.

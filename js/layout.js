@@ -1,4 +1,5 @@
 (function () { // ¬pub
+    'use strict';
 
     var leftHeader = document.querySelector('#list-panel > header'),
         leftBody = document.getElementById('left-body'),

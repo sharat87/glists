@@ -1,6 +1,7 @@
 /*global authenticated:false Backbone:false initializeAppView:false */
 // Activate the social buttons.
 setTimeout(function () {
+    'use strict';
 
     var canonicalUrl = document.querySelector('link[rel=canonical]').href,
         addScript = function (url) {
@@ -27,6 +28,7 @@ setTimeout(function () {
 }, 10);
 
 authenticated(function (auth) {
+    'use strict';
     // Add the access_token to all requests made by backbone to the REST end
     // point.
     var originalSync = Backbone.sync;
