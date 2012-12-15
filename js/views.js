@@ -314,8 +314,9 @@
                         'No due date' :
                         new ADate(dateValue).toLocaleString();
 
-                viewFragment.appendChild(
-                    new TaskHeaderView(categoryHeader).render().el);
+                var headerView = new TaskHeaderView();
+                headerView.due = categoryHeader;
+                viewFragment.appendChild(headerView.render().el);
                 viewFragment.appendChild(dated[dateValue]);
             }
 
@@ -333,8 +334,9 @@
         className: 'task-header',
         template: mktemplate('task-header-template'),
 
-        initialize: function (due) {
-            this.due = due;
+        initialize: function () {
+            // FIXME: Better way to do this?
+            this.due = null;
             this.collapsed = false;
         },
 

@@ -18,6 +18,7 @@ main () {
 
     # Use the minified version of vendor libs, where applicable.
     mv vendor/backbone-min.js vendor/backbone.js
+    mv vendor/underscore-min.js vendor/underscore.js
 
     # Remove the dev scripts and activate the publish script. Also remove/change
     # other dev to pub stuff.
