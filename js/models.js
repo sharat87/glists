@@ -14,7 +14,9 @@
         view: 'myOrder'
     });
 
-    var TaskItem = M.extend({
+    var TaskItem, TaskPosition, TaskList, TasksCollection, TaskListsCollection;
+
+    TaskItem = M.extend({
 
         initialize: function (attrs) {
             this.on('change:status', function () {
@@ -30,7 +32,7 @@
             this.position.task = this;
         },
 
-        parse: function (response, xhr) {
+        parse: function (response) {
             response.notes = response.notes || '';
             response.due = asAdate(response.due);
 
@@ -163,8 +165,7 @@
         },
 
         moveTo: function (toIndex) {
-            var coll = this.collection,
-                fromIndex = coll.indexOf(this);
+            var coll = this.collection;
 
             coll.remove(this, {silent: true});
 
@@ -197,7 +198,7 @@
 
     });
 
-    var TaskPosition = M.extend({
+    TaskPosition = M.extend({
 
         initialize: function () {
             this.on('change:parent change:previous', function () {
@@ -263,14 +264,14 @@
         }
     });
 
-    var _TasksCollection = C.extend({
+    TasksCollection = C.extend({
         model: TaskItem
     });
 
-    var TaskList = M.extend({
+    TaskList = M.extend({
 
         initialize: function () {
-            this.tasks = new _TasksCollection();
+            this.tasks = new TasksCollection();
             this.tasks.url = _.bind(this.tasksUrl, this);
         },
 
@@ -306,12 +307,12 @@
 
     });
 
-    var TaskListsCollection = C.extend({
+    TaskListsCollection = C.extend({
         model: TaskList,
         url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
 
         initialize: function () {
-            this.on('change', function (taskList) {
+            this.on('change', function () {
                 this.sort();
             }, this);
         },

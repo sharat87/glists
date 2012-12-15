@@ -20,7 +20,7 @@ setTimeout(function () {
     // Flattr button.
     // FIXME: Points to my homepage!
     document.getElementById('flattr-ln').href = 'http://sharats.me';
-    addScript('https://api.flattr.com/js/0.6/load.js?'+
+    addScript('https://api.flattr.com/js/0.6/load.js?' +
             'mode=auto&uid=sharat87');
 
 }, 10);
@@ -36,7 +36,7 @@ authenticated(function (auth) {
 
         options.beforeSend = function (xhr) {
             xhr.setRequestHeader('Authorization',
-                                 'Bearer ' + auth.access_token);
+                                 'Bearer ' + auth.accessToken);
             if (beforeSend) return beforeSend.call(this, xhr);
         };
 

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var jasmineEnv = jasmine.getEnv();
     jasmineEnv.updateInterval = 1000;
 
@@ -12,15 +12,15 @@
 
     var currentWindowOnload = window.onload;
 
+    function execJasmine() {
+        jasmineEnv.execute();
+    }
+
     window.onload = function () {
         if (currentWindowOnload) {
             currentWindowOnload();
         }
         authenticated(execJasmine);
     };
-
-    function execJasmine() {
-        jasmineEnv.execute();
-    }
 
 })();

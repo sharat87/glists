@@ -1,17 +1,17 @@
 (function () { // ¬pub
 
     var CLIENT_ID = '151476160203-t29qsdoev1sv2cmgnjld050j4avqrsr3' +
-        '.apps.googleusercontent.com';
+            '.apps.googleusercontent.com',
+        getNewToken;
 
     // Call the given function, with authentication stuff handled.
     var authenticated = function (callback) {
 
         var verifyToken = function (auth) {
+            /*jshint camelcase:false */
             $.ajax({
                 url: 'https://www.googleapis.com/oauth2/v1/tokeninfo',
-                data: {
-                    access_token: auth.access_token
-                },
+                data: {access_token: auth.access_token},
                 dataType: 'json',
                 success: function (response) {
                     if (response.audience !== CLIENT_ID) {
@@ -21,16 +21,22 @@
                     }
 
                     auth.verified = true;
-                    auth.expires_in = response.expires_in;
+
+                    auth.accessToken = auth.access_token;
+                    auth.expiresIn = response.expires_in;
+                    delete auth.access_token;
+                    delete auth.expires_in;
+
                     localStorage.auth = JSON.stringify(auth);
 
                     setTimeout(function () {
                         getNewToken(verifyToken);
-                    }, Math.max(0, auth.expires_in - 60) * 1000);
+                    }, Math.max(0, auth.expiresIn - 60) * 1000);
 
                     callback(auth);
                 },
                 error: function () {
+                    console.info('removing auth details');
                     localStorage.removeItem('auth');
                     getNewToken(verifyToken);
                 }
@@ -62,7 +68,7 @@
     });
 
     // Get a new token, intelligently.
-    var getNewToken = function (callback) {
+    getNewToken = function (callback) {
         var tokenRecieved = false,
             startTime = new Date().valueOf();
 

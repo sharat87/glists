@@ -26,7 +26,9 @@
             return this.views[model.cid];
         }
 
+        /*jshint newcap:false */
         var view = this.views[model.cid] = new this({model: model});
+
         model.on('destroy', view.remove, view);
         return view;
     };
@@ -43,6 +45,9 @@
         };
     };
 
+    var TaskView, TaskHeaderView, TasksCollectionView, TasksByDateView,
+        TaskListView, TaskListsCollectionView;
+
     var toolbarView = new (V.extend({
         el: document.querySelector('#right-panel > header'),
 
@@ -58,27 +63,27 @@
             this._currentView = this.qs({
                     myOrder: '.my-order-btn',
                     byDate: '.by-date-btn'
-                }[App.get('view')])
+                }[App.get('view')]);
             this._currentView.classList.add('current');
         },
 
         events: {
 
             // View in the user's order.
-            'click .my-order-btn': function (e) {
+            'click .my-order-btn': function () {
                 App.set({view: 'myOrder'});
             },
 
             // View sorted by date.
-            'click .by-date-btn': function (e) {
+            'click .by-date-btn': function () {
                 App.set({view: 'byDate'});
             },
 
-            'click .clear-btn': function (e) {
+            'click .clear-btn': function () {
                 TaskListView.currentList.clear();
             },
 
-            'click .add-task-btn': function (e) {
+            'click .add-task-btn': function () {
                 var task = new TaskItem(),
                     view = new TaskView({model: task});
 
@@ -92,9 +97,12 @@
 
         }
 
-    }));
+    }))();
 
-    var TaskView = V.extend({
+    // Shut jshint from saying toolbarView is never used.
+    (function () { return toolbarView; } ());
+
+    TaskView = V.extend({
         tagName: 'div',
         className: 'task-item',
 
@@ -178,8 +186,6 @@
         },
 
         startEditing: function () {
-            var self = this;
-
             if (this.el.classList.contains('editing')) {
                 return;
             }
@@ -325,7 +331,7 @@
 
     });
 
-    var TasksCollectionView = CV.extend({
+    TasksCollectionView = CV.extend({
         el: tasksContainer,
         render: function () {
             var modelsFragment = document.createDocumentFragment();
@@ -345,12 +351,12 @@
         }
     });
 
-    var TasksByDateView = CV.extend({
+    TasksByDateView = CV.extend({
         el: tasksContainer,
         template: mktemplate('task-header-template'),
 
         initialize: function () {
-            this.collection.on('sync destroy', function (e) {
+            this.collection.on('sync destroy', function () {
                 if (this.isActive()) this.render();
             }, this);
         },
@@ -399,7 +405,7 @@
 
     });
 
-    var TaskHeaderView = V.extend({
+    TaskHeaderView = V.extend({
         className: 'task-header',
         template: mktemplate('task-header-template'),
 
@@ -433,7 +439,7 @@
 
     });
 
-    var TaskListView = V.extend({
+    TaskListView = V.extend({
         tagName: 'li',
         className: 'task-list-item',
 
@@ -459,7 +465,7 @@
                 this.currentCollectionView.render();
             }, this);
 
-            App.on('change:view', function (App, view, changes) {
+            App.on('change:view', function (App, view) {
                 this.currentCollectionView = collectionViews[view];
 
                 // If this is the currently displayed list, render it.
@@ -523,7 +529,7 @@
     TaskListView.currentList = null;
     var taskListsCollection = null;
 
-    var TaskListsCollectionView = CV.extend({
+    TaskListsCollectionView = CV.extend({
         el: '#task-list-container',
 
         initialize: function () {

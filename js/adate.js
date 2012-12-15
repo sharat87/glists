@@ -13,6 +13,9 @@
     };
 
     ADate.prototype.toString = function () {
+        var pad = function (val) {
+            return (val < 10 ? '0' : '') + val;
+        };
         return this.year + '-' + pad(this.month) + '-' + pad(this.date);
     };
 
@@ -49,10 +52,6 @@
 
     var asAdate = function (d) {
         return d ? new ADate(d) : null;
-    };
-
-    var pad = function (val) {
-        return (val < 10 ? '0' : '') + val;
     };
 
     // ↓dev

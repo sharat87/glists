@@ -35,7 +35,7 @@ describe('API endpoint integration', function () {
     // Fetch all the lists, before we do anything.
     testSequence.push(function (nextFn) {
         taskListsCollection.fetch({
-            success: function (collection, response) {
+            success: function (collection) {
                 initialListCount = collection.length;
                 nextFn();
             }
@@ -46,7 +46,7 @@ describe('API endpoint integration', function () {
     testSequence.push(function (nextFn) {
         taskListsCollection.add(newList);
         newList.save({}, {
-            success: function (model, response) {
+            success: function () {
                 expect(newList.get('id')).toBeDefined();
                 expect(newList.get('title')).toEqual('New list');
                 nextFn();
@@ -57,7 +57,7 @@ describe('API endpoint integration', function () {
     // Fetch all lists again, and see that there is a new one.
     testSequence.push(function (nextFn) {
         taskListsCollection.fetch({
-            success: function (collection, response) {
+            success: function (collection) {
                 expect(collection.length).toEqual(initialListCount + 1);
                 nextFn();
             }
@@ -67,7 +67,7 @@ describe('API endpoint integration', function () {
     // Update the title of the list and confirm its changed.
     testSequence.push(function (nextFn) {
         newList.save({title: 'Updated list'}, {
-            success: function (model, response) {
+            success: function () {
                 expect(newList.get('title')).toEqual('Updated list');
                 nextFn();
             }
@@ -77,7 +77,7 @@ describe('API endpoint integration', function () {
     // Fetch tasks in the new list and ensure there are none.
     testSequence.push(function (nextFn) {
         newList.tasks.fetch({
-            success: function(collection, response) {
+            success: function (collection) {
                 expect(collection.length).toEqual(0);
                 nextFn();
             }
@@ -88,7 +88,7 @@ describe('API endpoint integration', function () {
     testSequence.push(function (nextFn) {
         newList.tasks.add(newTask);
         newTask.save({}, {
-            success: function (model, response) {
+            success: function () {
                 expect(newTask.get('id')).toBeDefined();
                 nextFn();
             }
@@ -98,7 +98,7 @@ describe('API endpoint integration', function () {
     // Fetch tasks in the new list and ensure there is exactly one.
     testSequence.push(function (nextFn) {
         newList.tasks.fetch({
-            success: function(collection, response) {
+            success: function (collection) {
                 expect(collection.length).toEqual(1);
                 nextFn();
             }
@@ -108,7 +108,7 @@ describe('API endpoint integration', function () {
     // Edit the title of this task.
     testSequence.push(function (nextFn) {
         newTask.save({title: 'edited title'}, {
-            success: function (model, response) {
+            success: function () {
                 expect(newTask.get('title')).toEqual('edited title');
                 nextFn();
             }
@@ -118,7 +118,7 @@ describe('API endpoint integration', function () {
     // Mark the task completed.
     testSequence.push(function (nextFn) {
         newTask.save({status: 'completed'}, {
-            success: function (model, response) {
+            success: function () {
                 expect(newTask.get('status')).toEqual('completed');
                 expect(newTask.get('completed')).toBeDefined();
                 nextFn();
@@ -129,7 +129,7 @@ describe('API endpoint integration', function () {
     // Mark the task incomplete.
     testSequence.push(function (nextFn) {
         newTask.save({status: 'needsAction'}, {
-            success: function (model, response) {
+            success: function () {
                 expect(newTask.get('status')).toEqual('needsAction');
                 expect(newTask.get('completed')).not.toBeDefined();
                 nextFn();
@@ -140,7 +140,7 @@ describe('API endpoint integration', function () {
     // Mark the task incomplete.
     testSequence.push(function (nextFn) {
         newTask.save({notes: 'will do'}, {
-            success: function (model, response) {
+            success: function () {
                 expect(newTask.get('notes')).toEqual('will do');
                 nextFn();
             }
@@ -151,7 +151,7 @@ describe('API endpoint integration', function () {
     testSequence.push(function (nextFn) {
         var date = new ADate();
         newTask.save({due: date}, {
-            success: function (model, response) {
+            success: function () {
                 expect(newTask.get('due')).toEqual(date);
                 nextFn();
             }
@@ -173,7 +173,7 @@ describe('API endpoint integration', function () {
     // Fetch tasks in the new list again and ensure there are none.
     testSequence.push(function (nextFn) {
         newList.tasks.fetch({
-            success: function(collection, response) {
+            success: function (collection) {
                 expect(collection.length).toEqual(0);
                 nextFn();
             }
@@ -193,7 +193,7 @@ describe('API endpoint integration', function () {
     // Fetch all lists again, and see that its back to the original listing.
     testSequence.push(function (nextFn) {
         taskListsCollection.fetch({
-            success: function (collection, response) {
+            success: function (collection) {
                 expect(collection.length).toEqual(initialListCount);
                 nextFn();
             }
