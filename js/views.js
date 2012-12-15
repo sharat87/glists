@@ -230,6 +230,23 @@
             view.startEditing();
         },
 
+        addTaskAbove: function () {
+            var task = new TaskItem(),
+                index = TaskListView.currentList.tasks.indexOf(this);
+
+            task.position.set({
+                parent: this.model.position.get('parent') || null,
+                previous: this.model.position.get('previous')
+            });
+
+            TaskListView.currentList.tasks.add(task, {at: index - 1});
+
+            var view = new TaskView({model: task});
+            tasksContainer.insertBefore(view.render().el, this.el);
+
+            view.startEditing();
+        },
+
         events: {
 
             'focus .title': 'startEditing',
@@ -249,6 +266,8 @@
                     // Return key.
                     if (e.shiftKey) {
                         this.addTaskBelow();
+                    } else if (e.ctrlKey) {
+                        this.addTaskAbove();
                     }
 
                 } else if (e.which === 9) {
