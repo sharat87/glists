@@ -1,8 +1,6 @@
 (function () { // ¬pub
-    /*global $:false _:false Backbone:false Mustache:false
-       confirm:false prompt:false
-       ADate:false asAdate:false App:false TaskItem:false TaskList:false
-       TaskListsCollection:false */
+    /*global $:false _:false Backbone:false Mustache:false App:false
+       confirm:false prompt:false ADate:false asAdate:false */
     'use strict';
 
     var byId = _.bind(document.getElementById, document),
@@ -50,10 +48,7 @@
         };
     };
 
-    var TaskView, TaskHeaderView, TasksCollectionView, TasksByDateView,
-        TaskListView, TaskListsCollectionView;
-
-    var toolbarView = new (V.extend({
+    App.toolbarView = new (V.define('ToolbarView', {
         el: document.querySelector('#right-panel > header'),
 
         initialize: function () {
@@ -85,14 +80,14 @@
             },
 
             'click .clear-btn': function () {
-                TaskListView.currentList.clear();
+                App.TaskListView.currentList.clear();
             },
 
             'click .add-task-btn': function () {
-                var task = new TaskItem(),
-                    view = new TaskView({model: task});
+                var task = new App.TaskItem(),
+                    view = new App.TaskView({model: task});
 
-                TaskListView.currentList.tasks.add(task, {at: 0});
+                App.TaskListView.currentList.tasks.add(task, {at: 0});
 
                 tasksContainer
                     .insertBefore(view.render().el, tasksContainer.firstChild);
@@ -104,10 +99,7 @@
 
     }))();
 
-    // Shut jshint from saying toolbarView is never used.
-    (function () { return toolbarView; } ());
-
-    TaskView = V.extend({
+    V.define('TaskView', {
         tagName: 'div',
         className: 'task-item',
 
@@ -225,9 +217,9 @@
         },
 
         addTaskBelow: function () {
-            var task = new TaskItem(),
-                index = TaskListView.currentList.tasks.indexOf(this.model),
-                nextTask = TaskListView.currentList.tasks.at(index + 1);
+            var task = new App.TaskItem(),
+                index = App.TaskListView.currentList.tasks.indexOf(this.model),
+                nextTask = App.TaskListView.currentList.tasks.at(index + 1);
 
             if (nextTask &&
                 nextTask.getIndentLevel() > this.model.getIndentLevel()) {
@@ -243,26 +235,26 @@
                 });
             }
 
-            TaskListView.currentList.tasks.add(task, {at: index + 1});
+            App.TaskListView.currentList.tasks.add(task, {at: index + 1});
 
-            var view = new TaskView({model: task});
+            var view = new App.TaskView({model: task});
             tasksContainer.insertBefore(view.render().el, this.el.nextSibling);
 
             view.startEditing();
         },
 
         addTaskAbove: function () {
-            var task = new TaskItem(),
-                index = TaskListView.currentList.tasks.indexOf(this.model);
+            var task = new App.TaskItem(),
+                index = App.TaskListView.currentList.tasks.indexOf(this.model);
 
             task.position.set({
                 parent: this.model.position.get('parent') || null,
                 previous: this.model.position.get('previous')
             });
 
-            TaskListView.currentList.tasks.add(task, {at: index});
+            App.TaskListView.currentList.tasks.add(task, {at: index});
 
-            var view = new TaskView({model: task});
+            var view = new App.TaskView({model: task});
             tasksContainer.insertBefore(view.render().el, this.el);
 
             view.startEditing();
@@ -336,13 +328,13 @@
 
     });
 
-    TasksCollectionView = CV.extend({
+    CV.define('TasksCollectionView', {
         el: tasksContainer,
         render: function () {
             var modelsFragment = document.createDocumentFragment();
 
             this.collection.each(function (model) {
-                var view = TaskView.forModel(model);
+                var view = App.TaskView.forModel(model);
                 view.showPosition = true;
                 modelsFragment.appendChild(view.render().el);
             }, this);
@@ -356,7 +348,7 @@
         }
     });
 
-    TasksByDateView = CV.extend({
+    CV.define('TasksByDateView', {
         el: tasksContainer,
         template: mktemplate('task-header-template'),
 
@@ -380,7 +372,7 @@
                     dueValues.push(dueValue);
                 }
 
-                var view = TaskView.forModel(model);
+                var view = App.TaskView.forModel(model);
                 view.showPosition = false;
                 dated[dueValue].appendChild(view.render().el);
 
@@ -394,7 +386,7 @@
                         'No due date' :
                         new ADate(dateValue).toLocaleString();
 
-                var headerView = new TaskHeaderView();
+                var headerView = new App.TaskHeaderView();
                 headerView.due = categoryHeader;
                 viewFragment.appendChild(headerView.render().el);
                 viewFragment.appendChild(dated[dateValue]);
@@ -410,7 +402,7 @@
 
     });
 
-    TaskHeaderView = V.extend({
+    V.define('TaskHeaderView', {
         className: 'task-header',
         template: mktemplate('task-header-template'),
 
@@ -444,7 +436,7 @@
 
     });
 
-    TaskListView = V.extend({
+    V.define('TaskListView', {
         tagName: 'li',
         className: 'task-list-item',
 
@@ -457,10 +449,10 @@
             this.model.on('pre-clear', this.setLoading, this);
 
             var collectionViews = {
-                myOrder: new TasksCollectionView({
+                myOrder: new App.TasksCollectionView({
                     collection: this.model.tasks
                 }),
-                byDate: new TasksByDateView({
+                byDate: new App.TasksByDateView({
                     collection: this.model.tasks
                 })
             };
@@ -474,7 +466,7 @@
                 this.currentCollectionView = collectionViews[view];
 
                 // If this is the currently displayed list, render it.
-                if (TaskListView.currentList === this.model) {
+                if (App.TaskListView.currentList === this.model) {
                     this.currentCollectionView.render();
                 }
 
@@ -489,7 +481,7 @@
         },
 
         load: function () {
-            TaskListView.currentList = this.model;
+            App.TaskListView.currentList = this.model;
             this.setLoading();
             this.model.tasks.fetch();
             return this;
@@ -531,10 +523,10 @@
     });
 
     // FIXME: Need a better way to do this.
-    TaskListView.currentList = null;
+    App.TaskListView.currentList = null;
     var taskListsCollection = null;
 
-    TaskListsCollectionView = CV.extend({
+    CV.define('TaskListsCollectionView', {
         el: '#task-list-container',
 
         initialize: function () {
@@ -546,7 +538,7 @@
 
             this.collection.each(function (model) {
                 modelsFragment.appendChild(
-                    TaskListView.forModel(model).render().el);
+                    App.TaskListView.forModel(model).render().el);
             }, this);
 
             this.el.innerHTML = '';
@@ -563,7 +555,7 @@
         e.preventDefault();
         var title = newListTitle.value;
         if (!title) return;
-        var newList = new TaskList({
+        var newList = new App.TaskList({
             title: title
         });
         taskListsCollection.add(newList);
@@ -590,7 +582,7 @@
     });
 
     var initializeAppView = function () {
-        taskListsCollection = new TaskListsCollection();
+        taskListsCollection = new App.TaskListsCollection();
 
         taskListsCollection.on('selected', function () {
             localStorage.lastViewedList = this.getSelectedList().get('id');
@@ -598,7 +590,7 @@
 
         taskListsCollection.fetch({
             success: function () {
-                new TaskListsCollectionView({
+                new App.TaskListsCollectionView({
                     collection: taskListsCollection
                 }).render();
                 taskListsCollection.setSelectedList(

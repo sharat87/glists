@@ -12,13 +12,12 @@
     };
 
     // A pseudo-model to handle app-level properties and events.
-    var App = new M({
+    var App = Backbone.App;
+    App.set({
         view: 'myOrder'
-    });
+    }, {silent: true});
 
-    var TaskItem, TaskPosition, TaskList, TasksCollection, TaskListsCollection;
-
-    TaskItem = M.extend({
+    M.define('TaskItem', {
 
         initialize: function (attrs) {
             this.on('change:status', function () {
@@ -27,7 +26,7 @@
                 }
             });
 
-            this.position = new TaskPosition({
+            this.position = new App.TaskPosition({
                 parent: attrs && attrs.parent,
                 position: attrs && attrs.position
             });
@@ -200,7 +199,7 @@
 
     });
 
-    TaskPosition = M.extend({
+    M.define('TaskPosition', {
 
         initialize: function () {
             this.on('change:parent change:previous', function () {
@@ -266,14 +265,14 @@
         }
     });
 
-    TasksCollection = C.extend({
-        model: TaskItem
+    C.define('TasksCollection', {
+        model: App.TaskItem
     });
 
-    TaskList = M.extend({
+    M.define('TaskList', {
 
         initialize: function () {
-            this.tasks = new TasksCollection();
+            this.tasks = new App.TasksCollection();
             this.tasks.url = _.bind(this.tasksUrl, this);
         },
 
@@ -309,8 +308,8 @@
 
     });
 
-    TaskListsCollection = C.extend({
-        model: TaskList,
+    C.define('TaskListsCollection', {
+        model: App.TaskList,
         url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
 
         initialize: function () {
@@ -354,12 +353,7 @@
     });
 
     // ↓dev
-    _.extend(window, {
-        App: App,
-        TaskItem: TaskItem,
-        TaskList: TaskList,
-        TaskListsCollection: TaskListsCollection
-    });
+    window.App = App;
     // ↑dev
 
 })(); // ¬pub
