@@ -7,10 +7,23 @@
         rightBody = document.getElementById('right-body');
 
     var reloadLayout = function () {
-        leftBody.style.height =
-            (window.innerHeight - leftHeader.offsetHeight) + 'px';
-        rightBody.style.height =
-            (window.innerHeight - rightHeader.offsetHeight) + 'px';
+        var expandos = document.getElementsByClassName('expando');
+
+        for (var i = 0, len = expandos.length; i < len; ++i) {
+            var expando = expandos[i],
+                siblings = expando.parentNode.childNodes,
+                slen = siblings.length,
+                siblingHeight = 0;
+
+            for (var j = 0; j < slen; ++j) {
+                if (siblings[j] !== expando) {
+                    siblingHeight += siblings[j].offsetHeight || 0;
+                }
+            }
+
+            expando.style.height = (window.innerHeight - siblingHeight) + 'px';
+        }
+
     };
 
     window.addEventListener('resize', reloadLayout);
