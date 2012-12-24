@@ -1,4 +1,4 @@
-(function () {
+(function () { // ¬pub
     /*jshint devel:true */
     /*global Backbone:false */
     'use strict';
@@ -6,7 +6,7 @@
     // Can be overridden to a different object.
     Backbone.App = new Backbone.Model();
 
-    var define = function (name, clsObject) {
+    var _define = function (name, clsObject) {
 
         // Check if a class with this name is already defined.
         if (Backbone.App[name]) {
@@ -21,6 +21,6 @@
     };
 
     Backbone.Model.define = Backbone.Collection.define = Backbone.View.define =
-        define;
+        _define;
 
-}());
+}()); // ¬pub
