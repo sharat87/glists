@@ -4,6 +4,7 @@ main () {
     prepare-build
 
     # Swith the global object from window to a plain local object.
+    publish js/backbone-app.js
     publish js/adate.js
     publish js/views.js
     publish js/models.js
